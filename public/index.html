@@ -31,6 +31,15 @@
     background: linear-gradient(135deg, #f5f5f7 0%, #ffffff 100%);
     padding: 2em 1em;
     box-sizing: border-box;
+    color: #1d1d1d;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      background: linear-gradient(135deg, #1d1d1d 0%, #0a0a0a 100%);
+      color: #f5f5f7;
+    }
   }
 
   .codeBox__wrapper {
@@ -48,6 +57,13 @@
     pointer-events: none;
     color: #1d1d1d;
     font-family: "Monaco", "Courier New", monospace;
+    transition: color 0.3s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    code {
+      color: #f5f5f7;
+    }
   }
 
   .codeBox {
@@ -61,6 +77,15 @@
     padding: 1.5em;
     border: 1px solid rgba(0, 0, 0, 0.06);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .codeBox {
+      background-color: #2c2c2e;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
   }
 
   .codeBox code {
@@ -100,8 +125,31 @@
     box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
   }
 
+  @media (prefers-color-scheme: dark) {
+    .copy-button {
+      background: linear-gradient(135deg, #0a84ff 0%, #0071e3 100%);
+      box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);
+    }
+
+    .copy-button:hover {
+      background: linear-gradient(135deg, #0077f0 0%, #0066dd 100%);
+      box-shadow: 0 8px 20px rgba(10, 132, 255, 0.4);
+    }
+
+    .copy-button:active {
+      box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);
+    }
+  }
+
   .white {
     color: #1d1d1d;
+    transition: color 0.3s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .white {
+      color: #f5f5f7;
+    }
   }
 
   .container {
@@ -124,6 +172,13 @@
     align-items: center;
     flex-direction: row;
     gap: 1em;
+    transition: color 0.3s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .container header {
+      color: #f5f5f7;
+    }
   }
 
   .logo-text {
@@ -142,6 +197,13 @@
   .container header>.text {
     font-size: 2em;
     color: #1d1d1d;
+    transition: color 0.3s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .container header>.text {
+      color: #f5f5f7;
+    }
   }
 
   .confirm-overlay {
@@ -182,6 +244,14 @@
     padding: 2.5em;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     max-width: 400px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .confirm-box {
+      background-color: #2c2c2e;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
   }
 
   .confirm-box__header {
@@ -199,6 +269,13 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    transition: color 0.3s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .confirm-box__header__text {
+      color: #f5f5f7;
+    }
   }
 
   .confirm-box__close {
@@ -235,6 +312,22 @@
     transform: translateY(0);
   }
 
+  @media (prefers-color-scheme: dark) {
+    .confirm-box__close button {
+      background-color: #48484a;
+      color: #f5f5f7;
+    }
+
+    .confirm-box__close button:hover {
+      background-color: #636366;
+      transform: translateY(-2px);
+    }
+
+    .confirm-box__close button:active {
+      transform: translateY(0);
+    }
+  }
+
   .confirm-box__body {
     display: flex;
     justify-content: center;
@@ -242,6 +335,13 @@
     flex-direction: column;
     gap: 1em;
     color: #1d1d1d;
+    transition: color 0.3s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .confirm-box__body {
+      color: #f5f5f7;
+    }
   }
 
   pre {

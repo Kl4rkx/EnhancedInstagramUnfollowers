@@ -77,9 +77,38 @@ For Android users who want to use it on mobile:
 
 ## 🛠️ Development
 
+### Prerequisites
 - Node version: 16.14.0 (If using nvm, run `nvm use`)
-- After modifying `main.tsx`, run the "build" command to format, compress, and convert your code
-- Automatic re-building can be done using nodemon build-dev
+- Package manager: pnpm (recommended for better security and performance)
+
+### Setup
+```bash
+# Install pnpm globally if you haven't already
+npm install -g pnpm
+
+# Install dependencies
+pnpm install
+
+# Build the project
+pnpm run build
+
+# Development mode with auto-reload
+pnpm run build-dev
+```
+
+### Commands
+- `pnpm run build` - Build for production
+- `pnpm run build-dev` - Development mode with hot reload
+- `pnpm run webpack-build` - Build only the webpack bundle
+
+### Migration from npm to pnpm
+This project has been migrated to pnpm for:
+- 🔒 Better security (stricter dependency resolution)
+- 🚀 Faster installations (content-addressable storage)
+- 💾 Disk space efficiency (hard links instead of copies)
+- 🔐 Protection against phantom dependencies
+
+If you're a contributor still using npm, please switch to pnpm for consistency.
 
 ## ⚖️ Legal & License
 

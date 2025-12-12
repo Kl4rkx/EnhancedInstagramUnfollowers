@@ -11,7 +11,7 @@ This version utilizes the Instagram API for better performance.
 
 ## 🖥️ Desktop Usage
 
-1. Copy the code from: [Enhanced Instagram Unfollowers Tool](https://github.com/Kl4rkx/EnhancedInstagramUnfollowers)
+1. Copy the code from: [Enhanced Instagram Unfollowers Tool](https://kl4rkx.github.io/EnhancedInstagramUnfollowers)
 
 2. Press the COPY button to copy the code.
 

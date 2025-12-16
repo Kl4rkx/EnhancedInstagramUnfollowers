@@ -314,6 +314,8 @@ export const Searching = ({
                       className="avatar"
                       alt={user.username}
                       src={user.profile_pic_url}
+                      loading="lazy"
+                      decoding="async"
                     />
                     <span className="avatar-icon-overlay-container">
                       {state.currentTab === "non_whitelisted" ? (

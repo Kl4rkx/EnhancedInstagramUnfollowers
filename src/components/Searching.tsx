@@ -1,9 +1,10 @@
-import React from "react";
-import { assertUnreachable, getCurrentPageUnfollowers, getMaxPage, getUsersForDisplay } from "../utils/utils";
+import React, { useMemo } from "react";
+import { assertUnreachable, getMaxPage } from "../utils/utils";
 import { State } from "../model/state";
 import { UserNode } from "../model/user";
 import { WHITELISTED_RESULTS_STORAGE_KEY } from "../constants/constants";
 import { TranslationKey } from "../constants/translations";
+import { UNFOLLOWERS_PER_PAGE } from "../constants/constants";
 
 
 export interface SearchingProps {
@@ -37,19 +38,57 @@ export const Searching = ({
     return null;
   }
 
-  const usersForDisplay = getUsersForDisplay(
-    state.results,
-    state.whitelistedResults,
-    state.currentTab,
-    state.searchTerm,
-    state.filter,
-  );
+  const whitelistedIds = useMemo(() => new Set(state.whitelistedResults.map(user => user.id)), [state.whitelistedResults]);
+
+  const usersForDisplay = useMemo(() => {
+    const searchTerm = state.searchTerm.toLowerCase();
+    const filtered: UserNode[] = [];
+    for (const result of state.results) {
+      const isWhitelisted = whitelistedIds.has(result.id);
+      if (state.currentTab === "non_whitelisted" && isWhitelisted) {
+        continue;
+      }
+      if (state.currentTab === "whitelisted" && !isWhitelisted) {
+        continue;
+      }
+      if (!state.filter.showPrivate && result.is_private) {
+        continue;
+      }
+      if (!state.filter.showVerified && result.is_verified) {
+        continue;
+      }
+      if (!state.filter.showFollowers && result.follows_viewer) {
+        continue;
+      }
+      if (!state.filter.showNonFollowers && !result.follows_viewer) {
+        continue;
+      }
+      if (!state.filter.showWithOutProfilePicture && result.profile_pic_url.includes("default_profile_400x400")) {
+        continue;
+      }
+      if (
+        state.searchTerm !== "" &&
+        !(result.username.toLowerCase().includes(searchTerm) || result.full_name.toLowerCase().includes(searchTerm))
+      ) {
+        continue;
+      }
+      filtered.push(result);
+    }
+    return filtered;
+  }, [state.results, state.results.length, whitelistedIds, state.currentTab, state.filter, state.searchTerm]);
+
+  const sortedUsersForDisplay = useMemo(() => {
+    return [...usersForDisplay].sort((a, b) => (a.username > b.username ? 1 : -1));
+  }, [usersForDisplay]);
+
+  const pageUsers = useMemo(() => {
+    const start = UNFOLLOWERS_PER_PAGE * (state.page - 1);
+    return sortedUsersForDisplay.slice(start, start + UNFOLLOWERS_PER_PAGE);
+  }, [sortedUsersForDisplay, state.page]);
+
   let currentLetter = "";
 
-  const onNewLetter = (firstLetter: string) => {
-    currentLetter = firstLetter;
-    return <div className="alphabet-character">{currentLetter}</div>;
-  };
+  const maxPage = useMemo(() => getMaxPage(sortedUsersForDisplay), [sortedUsersForDisplay]);
 
   return (
     <section className="flex">
@@ -116,7 +155,7 @@ export const Searching = ({
           </label>
         </menu>
         <div className="sidebar-stats">
-          <p>{t("displayed")}: {usersForDisplay.length}</p>
+          <p>{t("displayed")}: {sortedUsersForDisplay.length}</p>
           <p>{t("total")}: {state.results.length}</p>
           <p className="whitelist-counter">
             <span className="whitelist-badge">★</span> {t("whitelistedCount")}: {state.whitelistedResults.length}
@@ -148,11 +187,11 @@ export const Searching = ({
               ❮
             </a>
             <span>
-              {state.page}&nbsp;/&nbsp;{getMaxPage(usersForDisplay)}
+              {state.page}&nbsp;/&nbsp;{maxPage}
             </span>
             <a
               onClick={() => {
-                if (state.page < getMaxPage(usersForDisplay)) {
+                if (state.page < maxPage) {
                   setState({
                     ...state,
                     page: state.page + 1,
@@ -232,11 +271,15 @@ export const Searching = ({
           </div>
         </nav>
         <div className="results-list">
-          {getCurrentPageUnfollowers(usersForDisplay, state.page).map(user => {
+          {pageUsers.map(user => {
           const firstLetter = user.username.substring(0, 1).toUpperCase();
+          const showLetter = firstLetter !== currentLetter;
+          if (showLetter) {
+            currentLetter = firstLetter;
+          }
           return (
-            <>
-              {firstLetter !== currentLetter && onNewLetter(firstLetter)}
+            <React.Fragment key={user.id}>
+              {showLetter && <div className="alphabet-character" key={`letter-${firstLetter}`}>{firstLetter}</div>}
               <label className="result-item">
                 <div className="flex grow align-center">
                   <div
@@ -301,11 +344,11 @@ export const Searching = ({
                 <input
                   className="account-checkbox"
                   type="checkbox"
-                  checked={state.selectedResults.indexOf(user) !== -1}
+                  checked={state.selectedResults.some(selected => selected.id === user.id)}
                   onChange={e => toggleUser(e.currentTarget.checked, user)}
                 />
               </label>
-            </>
+            </React.Fragment>
           );
         })}
         </div>

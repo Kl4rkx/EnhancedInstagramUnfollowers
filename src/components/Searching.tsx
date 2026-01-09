@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo } from "react";
 import { assertUnreachable, getMaxPage } from "../utils/utils";
 import { State } from "../model/state";
 import { UserNode } from "../model/user";
@@ -37,14 +37,6 @@ export const Searching = ({
   if (state.status !== "scanning") {
     return null;
   }
-
-  const listRef = useRef<HTMLDivElement | null>(null);
-  const [viewportHeight, setViewportHeight] = useState(0);
-  const [renderRange, setRenderRange] = useState({ start: 0, end: 0 });
-
-  // Estimate item height for virtualization (approx. avatar row height)
-  const ITEM_HEIGHT = 96; // px
-  const BUFFER_ROWS = 3;
 
   const whitelistedIds = useMemo(() => new Set(state.whitelistedResults.map(user => user.id)), [state.whitelistedResults]);
 
@@ -94,30 +86,9 @@ export const Searching = ({
     return sortedUsersForDisplay.slice(start, start + UNFOLLOWERS_PER_PAGE);
   }, [sortedUsersForDisplay, state.page]);
 
-  const totalVisible = pageUsers.length;
-
-  useLayoutEffect(() => {
-    const height = listRef.current?.clientHeight ?? 0;
-    setViewportHeight(height);
-    const rowsInView = height ? Math.ceil(height / ITEM_HEIGHT) + BUFFER_ROWS * 2 : totalVisible;
-    setRenderRange({ start: 0, end: Math.min(totalVisible, rowsInView) });
-  }, [pageUsers, totalVisible]);
-
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const height = viewportHeight || listRef.current?.clientHeight || 0;
-    const rowsInView = height ? Math.ceil(height / ITEM_HEIGHT) + BUFFER_ROWS * 2 : totalVisible;
-    const scrollTop = e.currentTarget.scrollTop;
-    const start = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER_ROWS);
-    const end = Math.min(totalVisible, start + rowsInView);
-    setRenderRange({ start, end });
-  };
-
-  const virtualItems = pageUsers.slice(renderRange.start, renderRange.end);
-  const paddingTop = renderRange.start * ITEM_HEIGHT;
-  const paddingBottom = Math.max(0, (totalVisible - renderRange.end) * ITEM_HEIGHT);
-
-
   const maxPage = useMemo(() => getMaxPage(sortedUsersForDisplay), [sortedUsersForDisplay]);
+
+  let currentLetter = "";
 
   return (
     <section className="flex">
@@ -299,17 +270,16 @@ export const Searching = ({
             {t("whitelisted")}
           </div>
         </nav>
-        <div className="results-list" ref={listRef} onScroll={handleScroll}>
-          <div style={{ paddingTop: paddingTop, paddingBottom: paddingBottom }}>
-          {virtualItems.map((user, idx) => {
-          const globalIndex = renderRange.start + idx;
-          const prevUser = pageUsers[globalIndex - 1];
-          const prevLetter = prevUser ? prevUser.username.substring(0, 1).toUpperCase() : "";
+        <div className="results-list">
+          {pageUsers.map((user) => {
           const firstLetter = user.username.substring(0, 1).toUpperCase();
-          const showLetter = firstLetter !== prevLetter;
+          const showLetter = firstLetter !== currentLetter;
+          if (showLetter) {
+            currentLetter = firstLetter;
+          }
           return (
             <React.Fragment key={user.id}>
-              {showLetter && <div className="alphabet-character" key={`letter-${firstLetter}-${globalIndex}`}>{firstLetter}</div>}
+              {showLetter && <div className="alphabet-character" key={`letter-${firstLetter}`}>{firstLetter}</div>}
               <label className="result-item">
                 <div className="flex grow align-center">
                   <div
@@ -383,7 +353,6 @@ export const Searching = ({
             </React.Fragment>
           );
         })}
-        </div>
         </div>
       </article>
     </section>

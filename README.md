@@ -1,6 +1,6 @@
 # 📱 Enhanced Instagram Unfollowers
 
-[![Maintenance](https://img.shields.io/maintenance/yes/2025)](https://github.com/Kl4rkx/EnhancedInstagramUnfollowers)
+[![Maintenance](https://img.shields.io/maintenance/yes/2026)](https://github.com/Kl4rkx/EnhancedInstagramUnfollowers)
 
 *Read this in other languages: [Español](.github/README.es.md)*
 

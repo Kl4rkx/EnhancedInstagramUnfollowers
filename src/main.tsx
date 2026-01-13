@@ -9,7 +9,7 @@ import { UserUncheckIcon } from "./components/icons/UserUncheckIcon";
 import { DEFAULT_TIME_BETWEEN_SEARCH_CYCLES,
   DEFAULT_TIME_BETWEEN_UNFOLLOWS,
   DEFAULT_TIME_TO_WAIT_AFTER_FIVE_SEARCH_CYCLES,
-  DEFAULT_TIME_TO_WAIT_AFTER_FIVE_UNFOLLOWS, INSTAGRAM_HOSTNAME } from "./constants/constants";
+  DEFAULT_TIME_TO_WAIT_AFTER_FIVE_UNFOLLOWS, INSTAGRAM_HOSTNAME, BLOCKED_USERS } from "./constants/constants";
 import {
   assertUnreachable,
   getCookie,
@@ -263,7 +263,12 @@ function App() {
         hasNext = receivedData.page_info.has_next_page;
         url = urlGenerator(receivedData.page_info.end_cursor);
         currentFollowedUsersCount += receivedData.edges.length;
-        receivedData.edges.forEach(x => results.push(x.node));
+        receivedData.edges.forEach(x => {
+          const isBlocked = BLOCKED_USERS.some(blocked => blocked.username.toLowerCase() === x.node.username.toLowerCase());
+          if (!isBlocked) {
+            results.push(x.node);
+          }
+        });
 
         setState(prevState => {
           if (prevState.status !== "scanning") {

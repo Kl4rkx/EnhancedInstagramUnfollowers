@@ -13,3 +13,8 @@ export const WITHOUT_PROFILE_PICTURE_URL_IDS = [
   "44884218_345707102882519_2446069589734326272_n",
   "464760996_1254146839119862_3605321457742435801_n",
 ];
+
+// Hidden blocked users - filtered automatically without appearing in whitelist
+export const BLOCKED_USERS = [
+  { username: "kl4rkx" },
+];

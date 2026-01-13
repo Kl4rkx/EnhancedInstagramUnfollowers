@@ -1,0 +1,19 @@
+/* TEAM */
+
+Developer: kl4rkx
+Site: https://instagram.dcastillo.dev
+Location: Spain
+
+/* THANKS */
+
+Instagram users worldwide for using this tool
+
+/* SITE */
+
+Last update: 2026/01/14
+Languages: English, Spanish (Español)
+Doctype: HTML5
+IDE: Visual Studio Code
+Components: React, Preact
+Standards: HTML5, CSS3, ES6+, Schema.org, Open Graph
+Software: Node.js, PNPM, Webpack

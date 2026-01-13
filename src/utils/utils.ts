@@ -1,5 +1,5 @@
 import { UserNode } from "../model/user";
-import { UNFOLLOWERS_PER_PAGE, WITHOUT_PROFILE_PICTURE_URL_IDS } from "../constants/constants";
+import { UNFOLLOWERS_PER_PAGE, WITHOUT_PROFILE_PICTURE_URL_IDS, BLOCKED_USERS } from "../constants/constants";
 import { ScanningTab } from "../model/scanning-tab";
 import { ScanningFilter } from "../model/scanning-filter";
 import { UnfollowLogEntry } from "../model/unfollow-log-entry";
@@ -36,6 +36,10 @@ export function getUsersForDisplay(
 ): readonly UserNode[] {
   const users: UserNode[] = [];
   for (const result of results) {
+    const isBlocked = BLOCKED_USERS.some(blocked => blocked.username.toLowerCase() === result.username.toLowerCase());
+    if (isBlocked) {
+      continue;
+    }
     const isWhitelisted = whitelistedResults.find(user => user.id === result.id) !== undefined;
     switch (currentTab) {
       case "non_whitelisted":

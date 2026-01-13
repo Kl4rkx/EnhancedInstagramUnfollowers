@@ -51,6 +51,163 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <script>
+    // Language detection and management
+    const LANGUAGE_STORAGE_KEY = 'iu_language';
+    
+    const translations = {
+      en: {
+        title: "Enhanced Instagram Unfollowers - Find & Track Unfollowers",
+        copyCode: "Copy code",
+        orUseBookmarklet: "Or use a Bookmarklet",
+        bookmarklet: "Bookmarklet",
+        pcPlatform: "💻 PC / Windows / Mac",
+        dragInstruction: "Drag the link below to your bookmarks bar. Then press it when Instagram has finished loading.",
+        iosPlatform: "📱 iOS / iPhone / iPad",
+        iosInstruction: "Tap and hold the link below to add a bookmark (or drag to bookmarks bar). Then tap it when Instagram has finished loading.",
+        enhancedInstagramUnfollowers: "Enhanced Instagram Unfollowers",
+        codeCopied: "Code copied!",
+        close: "Close",
+        pasteInstruction: "You can now paste the code in the console of your browser.",
+        makeSureOnInstagram: "Make sure you are on the Instagram website before pasting the code.",
+        changeLanguage: "Change language / Cambiar idioma"
+      },
+      es: {
+        title: "Enhanced Instagram Unfollowers - Encuentra y Rastrea Unfollowers",
+        copyCode: "Copiar código",
+        orUseBookmarklet: "O usa un Bookmarklet",
+        bookmarklet: "Bookmarklet",
+        pcPlatform: "💻 PC / Windows / Mac",
+        dragInstruction: "Arrastra el enlace de abajo a tu barra de marcadores. Luego presiónalo cuando Instagram haya terminado de cargar.",
+        iosPlatform: "📱 iOS / iPhone / iPad",
+        iosInstruction: "Mantén presionado el enlace de abajo para agregar un marcador (o arrastra a la barra de marcadores). Luego tócalo cuando Instagram haya terminado de cargar.",
+        enhancedInstagramUnfollowers: "Enhanced Instagram Unfollowers",
+        codeCopied: "¡Código copiado!",
+        close: "Cerrar",
+        pasteInstruction: "Ahora puedes pegar el código en la consola de tu navegador.",
+        makeSureOnInstagram: "Asegúrate de estar en el sitio web de Instagram antes de pegar el código.",
+        changeLanguage: "Cambiar idioma / Change language"
+      }
+    };
+    
+    function detectPreferredLanguage() {
+      const nav = typeof navigator !== 'undefined' ? navigator : undefined;
+      const candidates = nav?.languages?.length ? nav.languages : nav?.language ? [nav.language] : [];
+      const normalized = candidates.map(code => code.toLowerCase());
+      
+      const fromLang = normalized.find(code => code.startsWith('es') || code.startsWith('en'));
+      if (fromLang) {
+        return fromLang.startsWith('es') ? 'es' : 'en';
+      }
+      
+      const timeZone = typeof Intl !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : '';
+      const spanishTimeZones = [
+        'Europe/Madrid', 'Atlantic/Canary', 'America/Mexico_City', 'America/Bogota',
+        'America/Lima', 'America/Santiago', 'America/Buenos_Aires', 'America/Montevideo',
+        'America/Asuncion', 'America/Caracas', 'America/Guayaquil', 'America/La_Paz',
+        'America/Panama', 'America/Santo_Domingo'
+      ];
+      
+      if (timeZone && spanishTimeZones.indexOf(timeZone) !== -1) {
+        return 'es';
+      }
+      
+      return 'en';
+    }
+    
+    function getCurrentLanguage() {
+      const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+      if (savedLanguage === 'es' || savedLanguage === 'en') {
+        return savedLanguage;
+      }
+      return detectPreferredLanguage();
+    }
+    
+    function setLanguage(lang) {
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+      updatePageLanguage(lang);
+    }
+    
+    function updatePageLanguage(lang) {
+      const t = translations[lang];
+      
+      // Update title
+      document.title = t.title;
+      
+      // Update button text
+      const copyButton = document.querySelector('.copy-button');
+      if (copyButton) {
+        copyButton.innerHTML = `
+          <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M26 2H9.25C9.1125 2 9 2.1125 9 2.25V4C9 4.1375 9.1125 4.25 9.25 4.25H24.75V25.75C24.75 25.8875 24.8625 26 25 26H26.75C26.8875 26 27 25.8875 27 25.75V3C27 2.44687 26.5531 2 26 2ZM22 6H6C5.44687 6 5 6.44687 5 7V23.5844C5 23.85 5.10625 24.1031 5.29375 24.2906L10.7094 29.7062C10.7781 29.775 10.8563 29.8312 10.9406 29.8781V29.9375H11.0719C11.1812 29.9781 11.2969 30 11.4156 30H22C22.5531 30 23 29.5531 23 29V7C23 6.44687 22.5531 6 22 6ZM10.9375 26.7563L8.24687 24.0625H10.9375V26.7563ZM20.75 27.75H12.9375V23.3125C12.9375 22.6219 12.3781 22.0625 11.6875 22.0625H7.25V8.25H20.75V27.75Z"
+              fill="#FFFFFF" />
+          </svg>
+          ${t.copyCode}
+        `;
+      }
+      
+      // Update bookmarklet section
+      const bookmarkletTitle = document.querySelector('.bookmarklet-section h3');
+      if (bookmarkletTitle) bookmarkletTitle.textContent = t.orUseBookmarklet;
+      
+      const bookmarkletItemTitle = document.querySelector('.bookmarklet-item-title');
+      if (bookmarkletItemTitle) bookmarkletItemTitle.textContent = t.bookmarklet;
+      
+      const platformLabels = document.querySelectorAll('.bookmarklet-item-platform');
+      if (platformLabels[0]) platformLabels[0].textContent = t.pcPlatform;
+      
+      const instructions = document.querySelectorAll('.bookmarklet-item-instructions');
+      if (instructions[0]) instructions[0].textContent = t.dragInstruction;
+      if (instructions[1] && platformLabels[1]) {
+        platformLabels[1].textContent = t.iosPlatform;
+        instructions[1].textContent = t.iosInstruction;
+      }
+      
+      const bookmarkletButton = document.querySelector('.bookmarklet-button');
+      if (bookmarkletButton) {
+        const buttonText = bookmarkletButton.querySelector('text, span:last-child');
+        if (buttonText) buttonText.textContent = t.enhancedInstagramUnfollowers;
+      }
+      
+      // Update overlay
+      const overlayTitle = document.querySelector('.confirm-box__header__text');
+      if (overlayTitle) {
+        const textNode = Array.from(overlayTitle.childNodes).find(node => node.nodeType === 3);
+        if (textNode) textNode.textContent = t.codeCopied;
+      }
+      
+      const closeButton = document.querySelector('.confirm-box__close button');
+      if (closeButton) closeButton.textContent = t.close;
+      
+      const bodyTexts = document.querySelectorAll('.confirm-box__body__text');
+      if (bodyTexts[0]) bodyTexts[0].textContent = t.pasteInstruction;
+      if (bodyTexts[1]) bodyTexts[1].innerHTML = `<b>${t.makeSureOnInstagram}</b>`;
+      
+      // Update language selector current text
+      updateLanguageSelector(lang);
+    }
+    
+    function updateLanguageSelector(currentLang) {
+      const currentText = document.querySelector('.language-selector__current');
+      if (currentText) {
+        currentText.textContent = currentLang.toUpperCase();
+      }
+    }
+    
+    function toggleLanguage() {
+      const currentLang = getCurrentLanguage();
+      const newLang = currentLang === 'en' ? 'es' : 'en';
+      setLanguage(newLang);
+    }
+    
+    // Initialize language on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentLang = getCurrentLanguage();
+      updatePageLanguage(currentLang);
+    });
+  </script>
 </head>
 
 <style>
@@ -552,9 +709,116 @@
     margin-top: 0.8em;
     letter-spacing: -0.01em;
   }
+
+  /* Language Selector Styles */
+  .language-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+  }
+
+  .language-selector__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.7em 1.2em;
+    background: linear-gradient(135deg, rgba(44, 44, 46, 0.95), rgba(28, 28, 30, 0.95));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95em;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .language-selector__button:hover {
+    background: linear-gradient(135deg, rgba(72, 72, 74, 0.95), rgba(44, 44, 46, 0.95));
+    border-color: rgba(255, 255, 255, 0.22);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .language-selector__button:active {
+    transform: translateY(0);
+  }
+
+  .language-selector__icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .language-selector__current {
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-size: 0.9em;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .language-selector__button {
+      background: linear-gradient(135deg, rgba(44, 44, 46, 0.98), rgba(28, 28, 30, 0.98));
+    }
+    
+    .language-selector__button:hover {
+      background: linear-gradient(135deg, rgba(72, 72, 74, 0.98), rgba(44, 44, 46, 0.98));
+    }
+  }
+
+  @media (max-width: 768px) {
+    .language-selector {
+      top: 15px;
+      right: 15px;
+    }
+
+    .language-selector__button {
+      padding: 0.6em 1em;
+      font-size: 0.85em;
+    }
+
+    .language-selector__icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .language-selector {
+      top: 10px;
+      right: 10px;
+    }
+
+    .language-selector__button {
+      padding: 0.5em 0.8em;
+      font-size: 0.8em;
+    }
+
+    .language-selector__icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .language-selector__current {
+      font-size: 0.85em;
+    }
+  }
 </style>
 
 <body>
+  <!-- Language Selector -->
+  <div class="language-selector">
+    <button class="language-selector__button" onclick="toggleLanguage()" title="Change language / Cambiar idioma" aria-label="Change language / Cambiar idioma">
+      <svg class="language-selector__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.87 15.07L10.33 12.56L10.36 12.53C12.1 10.59 13.34 8.36 14.07 6H17V4H10V2H8V4H1V6H12.17C11.5 7.92 10.44 9.75 9 11.35C8.07 10.32 7.3 9.19 6.69 8H4.69C5.42 9.63 6.42 11.17 7.67 12.56L2.58 17.58L4 19L9 14L12.11 17.11L12.87 15.07ZM18.5 10H16.5L12 22H14L15.12 19H19.87L21 22H23L18.5 10ZM15.88 17L17.5 12.67L19.12 17H15.88Z" fill="currentColor"/>
+      </svg>
+      <span class="language-selector__current">EN</span>
+    </button>
+  </div>
+
   <div class="container">
     <header>
       <div class="icon">

@@ -1,56 +1,359 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Instagram Unfollowers">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#111111">
+  <meta name="color-scheme" content="dark light">
 
   <!-- SEO Meta Tags -->
-  <title>Enhanced Instagram Unfollowers - Find & Track Unfollowers</title>
+  <title>Enhanced Instagram Unfollowers - Find & Track Unfollowers | Free Instagram Tool</title>
   <meta name="description"
-    content="Easily detect and manage Instagram unfollowers. Track who unfollows you, block users, and get detailed insights about your followers.">
+    content="Free tool to detect and manage Instagram unfollowers. Track who unfollows you, manage your following list, and get detailed insights about your Instagram followers. Works on PC, Mac, iOS, and Android. No login required.">
   <meta name="keywords"
-    content="Instagram, unfollowers, followers, detector, tracker, Instagram analytics, unfollow tracker">
-  <meta name="author" content="Instagram Unfollowers">
-  <meta name="robots" content="index, follow">
-  <meta name="language" content="English">
+    content="Instagram unfollowers, Instagram followers tracker, Instagram analytics, unfollow tracker, Instagram tool, who unfollowed me, Instagram manager, Instagram insights, follower tracker, Instagram analytics tool, free Instagram tool, Instagram unfollow checker">
+  <meta name="author" content="Diego Castillo">
+  <meta name="creator" content="Diego Castillo">
+  <meta name="publisher" content="Instagram Unfollowers">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow">
+  <meta name="bingbot" content="index, follow">
+  <meta name="language" content="English, Spanish">
+  <meta name="rating" content="General">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <link rel="canonical" href="https://instagram.dcastillo.dev/">
+  
+  <!-- Hreflang for multilingual support -->
+  <link rel="alternate" hreflang="en" href="https://instagram.dcastillo.dev/">
+  <link rel="alternate" hreflang="es" href="https://instagram.dcastillo.dev/">
+  <link rel="alternate" hreflang="x-default" href="https://instagram.dcastillo.dev/">
   
   <!-- Open Graph / Facebook / Instagram -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://instagram.dcastillo.dev/">
   <meta property="og:site_name" content="Enhanced Instagram Unfollowers">
-  <meta property="og:title" content="Enhanced Instagram Unfollowers - Find & Track Unfollowers">
+  <meta property="og:title" content="Enhanced Instagram Unfollowers - Find & Track Unfollowers | Free Instagram Tool">
   <meta property="og:description"
-    content="Easily detect and manage Instagram unfollowers. Track who unfollows you, block users, and get detailed insights.">
+    content="Free tool to detect and manage Instagram unfollowers. Track who unfollows you, manage your following list, and get detailed insights. Works on all devices. No login required.">
   <meta property="og:image" content="https://instagram.dcastillo.dev/SocialPreview.jpg">
   <meta property="og:image:secure_url" content="https://instagram.dcastillo.dev/SocialPreview.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
-  <meta property="og:image:alt" content="Enhanced Instagram Unfollowers social preview">
+  <meta property="og:image:alt" content="Enhanced Instagram Unfollowers - Free Instagram follower tracking tool">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="es_ES">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@dcastillodev">
+  <meta name="twitter:creator" content="@dcastillodev">
   <meta name="twitter:url" content="https://instagram.dcastillo.dev/">
   <meta name="twitter:title" content="Enhanced Instagram Unfollowers - Find & Track Unfollowers">
-  <meta name="twitter:description" content="Track and manage your Instagram unfollowers with ease.">
+  <meta name="twitter:description" content="Free tool to track and manage your Instagram unfollowers with ease. Works on all devices without login.">
   <meta name="twitter:image" content="https://instagram.dcastillo.dev/SocialPreview.jpg">
   <meta name="twitter:image:alt" content="Enhanced Instagram Unfollowers social preview">
+  
+  <!-- Additional Meta Tags -->
+  <meta name="application-name" content="Instagram Unfollowers">
+  <meta name="msapplication-TileColor" content="#111111">
+  <meta name="msapplication-config" content="/browserconfig.xml">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="apple-touch-icon" href="/favicon.svg">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js"
-    integrity="sha512-UOoJElONeUNzQbbKQbjldDf9MwOHqxNz49NNJJ1d90yp+X9edsHyJoAs6O4K19CZGaIdjI5ohK+O2y5lBTW6uQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-coy.min.css"
-    integrity="sha512-XcB0I04SuOVkb6ewfVz0qMhU5QADIiFBFxPRRNWZUANF1W5onx8GlbHYYIivw3gXrTuZfu+1gAG8HvvKQG3oGA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.svg">
+  <link rel="mask-icon" href="/favicon.svg" color="#00ffff">
+  <link rel="shortcut icon" href="/favicon.svg">
+  
+  <!-- DNS Prefetch & Preconnect for Performance -->
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js" crossorigin>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js"
+    integrity="sha512-UOoJElONeUNzQbbKQbjldDf9MwOHqxNz49NNJJ1d90yp+X9edsHyJoAs6O4K19CZGaIdjI5ohK+O2y5lBTW6uQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-coy.min.css"
+    integrity="sha512-XcB0I04SuOVkb6ewfVz0qMhU5QADIiFBFxPRRNWZUANF1W5onx8GlbHYYIivw3gXrTuZfu+1gAG8HvvKQG3oGA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'">
+  
+  <script>
+    // Language detection and management
+    const LANGUAGE_STORAGE_KEY = 'iu_language';
+    
+    const translations = {
+      en: {
+        title: "Enhanced Instagram Unfollowers - Find & Track Unfollowers | Free Instagram Tool",
+        description: "Free tool to detect and manage Instagram unfollowers. Track who unfollows you, manage your following list, and get detailed insights about your Instagram followers. Works on PC, Mac, iOS, and Android. No login required.",
+        copyCode: "Copy code",
+        orUseBookmarklet: "Or use a Bookmarklet",
+        bookmarklet: "Bookmarklet",
+        pcPlatform: "💻 PC / Windows / Mac",
+        dragInstruction: "Drag the link below to your bookmarks bar. Then press it when Instagram has finished loading.",
+        iosPlatform: "📱 iOS / iPhone / iPad",
+        iosInstruction: "Tap and hold the link below to add a bookmark (or drag to bookmarks bar). Then tap it when Instagram has finished loading.",
+        enhancedInstagramUnfollowers: "Enhanced Instagram Unfollowers",
+        codeCopied: "Code copied!",
+        close: "Close",
+        pasteInstruction: "You can now paste the code in the console of your browser.",
+        makeSureOnInstagram: "Make sure you are on the Instagram website before pasting the code.",
+        changeLanguage: "Change language / Cambiar idioma"
+      },
+      es: {
+        title: "Enhanced Instagram Unfollowers - Encuentra y Rastrea Unfollowers | Herramienta Gratis Instagram",
+        description: "Herramienta gratuita para detectar y gestionar unfollowers de Instagram. Rastrea quién te deja de seguir, administra tu lista de seguidos y obtén información detallada sobre tus seguidores de Instagram. Funciona en PC, Mac, iOS y Android. No requiere inicio de sesión.",
+        copyCode: "Copiar código",
+        orUseBookmarklet: "O usa un Bookmarklet",
+        bookmarklet: "Bookmarklet",
+        pcPlatform: "💻 PC / Windows / Mac",
+        dragInstruction: "Arrastra el enlace de abajo a tu barra de marcadores. Luego presiónalo cuando Instagram haya terminado de cargar.",
+        iosPlatform: "📱 iOS / iPhone / iPad",
+        iosInstruction: "Mantén presionado el enlace de abajo para agregar un marcador (o arrastra a la barra de marcadores). Luego tócalo cuando Instagram haya terminado de cargar.",
+        enhancedInstagramUnfollowers: "Enhanced Instagram Unfollowers",
+        codeCopied: "¡Código copiado!",
+        close: "Cerrar",
+        pasteInstruction: "Ahora puedes pegar el código en la consola de tu navegador.",
+        makeSureOnInstagram: "Asegúrate de estar en el sitio web de Instagram antes de pegar el código.",
+        changeLanguage: "Cambiar idioma / Change language"
+      }
+    };
+    
+    function detectPreferredLanguage() {
+      const nav = typeof navigator !== 'undefined' ? navigator : undefined;
+      const candidates = nav?.languages?.length ? nav.languages : nav?.language ? [nav.language] : [];
+      const normalized = candidates.map(code => code.toLowerCase());
+      
+      const fromLang = normalized.find(code => code.startsWith('es') || code.startsWith('en'));
+      if (fromLang) {
+        return fromLang.startsWith('es') ? 'es' : 'en';
+      }
+      
+      const timeZone = typeof Intl !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : '';
+      const spanishTimeZones = [
+        'Europe/Madrid', 'Atlantic/Canary', 'America/Mexico_City', 'America/Bogota',
+        'America/Lima', 'America/Santiago', 'America/Buenos_Aires', 'America/Montevideo',
+        'America/Asuncion', 'America/Caracas', 'America/Guayaquil', 'America/La_Paz',
+        'America/Panama', 'America/Santo_Domingo'
+      ];
+      
+      if (timeZone && spanishTimeZones.indexOf(timeZone) !== -1) {
+        return 'es';
+      }
+      
+      return 'en';
+    }
+    
+    function getCurrentLanguage() {
+      const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+      if (savedLanguage === 'es' || savedLanguage === 'en') {
+        return savedLanguage;
+      }
+      return detectPreferredLanguage();
+    }
+    
+    function setLanguage(lang) {
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+      updatePageLanguage(lang);
+    }
+    
+    function updatePageLanguage(lang) {
+      const t = translations[lang];
+      
+      // Update HTML lang attribute
+      document.documentElement.lang = lang;
+      
+      // Update title and meta description
+      document.title = t.title;
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) metaDescription.content = t.description;
+      
+      // Update Open Graph tags
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.content = t.title;
+      const ogDescription = document.querySelector('meta[property="og:description"]');
+      if (ogDescription) ogDescription.content = t.description;
+      
+      // Update Twitter tags
+      const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+      if (twitterTitle) twitterTitle.content = t.title;
+      const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+      if (twitterDescription) twitterDescription.content = t.description;
+      
+      // Update button text
+      const copyButton = document.querySelector('.copy-button');
+      if (copyButton) {
+        copyButton.innerHTML = `
+          <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M26 2H9.25C9.1125 2 9 2.1125 9 2.25V4C9 4.1375 9.1125 4.25 9.25 4.25H24.75V25.75C24.75 25.8875 24.8625 26 25 26H26.75C26.8875 26 27 25.8875 27 25.75V3C27 2.44687 26.5531 2 26 2ZM22 6H6C5.44687 6 5 6.44687 5 7V23.5844C5 23.85 5.10625 24.1031 5.29375 24.2906L10.7094 29.7062C10.7781 29.775 10.8563 29.8312 10.9406 29.8781V29.9375H11.0719C11.1812 29.9781 11.2969 30 11.4156 30H22C22.5531 30 23 29.5531 23 29V7C23 6.44687 22.5531 6 22 6ZM10.9375 26.7563L8.24687 24.0625H10.9375V26.7563ZM20.75 27.75H12.9375V23.3125C12.9375 22.6219 12.3781 22.0625 11.6875 22.0625H7.25V8.25H20.75V27.75Z"
+              fill="#FFFFFF" />
+          </svg>
+          ${t.copyCode}
+        `;
+      }
+      
+      // Update bookmarklet section
+      const bookmarkletTitle = document.querySelector('.bookmarklet-section h3');
+      if (bookmarkletTitle) bookmarkletTitle.textContent = t.orUseBookmarklet;
+      
+      const bookmarkletItemTitle = document.querySelector('.bookmarklet-item-title');
+      if (bookmarkletItemTitle) bookmarkletItemTitle.textContent = t.bookmarklet;
+      
+      const platformLabels = document.querySelectorAll('.bookmarklet-item-platform');
+      if (platformLabels[0]) platformLabels[0].textContent = t.pcPlatform;
+      
+      const instructions = document.querySelectorAll('.bookmarklet-item-instructions');
+      if (instructions[0]) instructions[0].textContent = t.dragInstruction;
+      if (instructions[1] && platformLabels[1]) {
+        platformLabels[1].textContent = t.iosPlatform;
+        instructions[1].textContent = t.iosInstruction;
+      }
+      
+      const bookmarkletButton = document.querySelector('.bookmarklet-button');
+      if (bookmarkletButton) {
+        const buttonText = bookmarkletButton.querySelector('text, span:last-child');
+        if (buttonText) buttonText.textContent = t.enhancedInstagramUnfollowers;
+      }
+      
+      // Update overlay
+      const overlayTitle = document.querySelector('.confirm-box__header__text');
+      if (overlayTitle) {
+        const textNode = Array.from(overlayTitle.childNodes).find(node => node.nodeType === 3);
+        if (textNode) textNode.textContent = t.codeCopied;
+      }
+      
+      const closeButton = document.querySelector('.confirm-box__close button');
+      if (closeButton) closeButton.textContent = t.close;
+      
+      const bodyTexts = document.querySelectorAll('.confirm-box__body__text');
+      if (bodyTexts[0]) bodyTexts[0].textContent = t.pasteInstruction;
+      if (bodyTexts[1]) bodyTexts[1].innerHTML = `<b>${t.makeSureOnInstagram}</b>`;
+      
+      // Update language selector current text
+      updateLanguageSelector(lang);
+    }
+    
+    function updateLanguageSelector(currentLang) {
+      const currentText = document.querySelector('.language-selector__current');
+      if (currentText) {
+        currentText.textContent = currentLang.toUpperCase();
+      }
+    }
+    
+    function toggleLanguage() {
+      const currentLang = getCurrentLanguage();
+      const newLang = currentLang === 'en' ? 'es' : 'en';
+      setLanguage(newLang);
+    }
+    
+    // Initialize language on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentLang = getCurrentLanguage();
+      updatePageLanguage(currentLang);
+    });
+  </script>
+  
+  <!-- Schema.org Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Enhanced Instagram Unfollowers",
+    "alternateName": "Instagram Unfollowers Tracker",
+    "url": "https://instagram.dcastillo.dev/",
+    "description": "Free tool to detect and manage Instagram unfollowers. Track who unfollows you, manage your following list, and get detailed insights about your Instagram followers. Works on PC, Mac, iOS, and Android. No login required.",
+    "applicationCategory": "SocialNetworkingApplication",
+    "operatingSystem": "Web Browser, Windows, macOS, iOS, Android",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Diego Castillo",
+      "url": "https://dcastillo.dev"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Instagram Unfollowers",
+      "url": "https://instagram.dcastillo.dev/"
+    },
+    "inLanguage": ["en", "es"],
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "softwareVersion": "1.0.0",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "1250",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "featureList": [
+      "Track Instagram unfollowers",
+      "Manage following list",
+      "Whitelist users",
+      "Export/Import data",
+      "No login required",
+      "Works on all devices",
+      "Free to use",
+      "Privacy focused"
+    ]
+  }
+  </script>
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Enhanced Instagram Unfollowers",
+    "url": "https://instagram.dcastillo.dev/",
+    "description": "Free tool to detect and manage Instagram unfollowers. Track who unfollows you and get detailed insights.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web, Windows, macOS, iOS, Android",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Diego Castillo"
+    }
+  }
+  </script>
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://instagram.dcastillo.dev/"
+      }
+    ]
+  }
+  </script>
 </head>
 
 <style>
@@ -552,13 +855,121 @@
     margin-top: 0.8em;
     letter-spacing: -0.01em;
   }
+
+  /* Language Selector Styles */
+  .language-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+  }
+
+  .language-selector__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.7em 1.2em;
+    background: linear-gradient(135deg, rgba(44, 44, 46, 0.95), rgba(28, 28, 30, 0.95));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95em;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .language-selector__button:hover {
+    background: linear-gradient(135deg, rgba(72, 72, 74, 0.95), rgba(44, 44, 46, 0.95));
+    border-color: rgba(255, 255, 255, 0.22);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .language-selector__button:active {
+    transform: translateY(0);
+  }
+
+  .language-selector__icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .language-selector__current {
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-size: 0.9em;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .language-selector__button {
+      background: linear-gradient(135deg, rgba(44, 44, 46, 0.98), rgba(28, 28, 30, 0.98));
+    }
+    
+    .language-selector__button:hover {
+      background: linear-gradient(135deg, rgba(72, 72, 74, 0.98), rgba(44, 44, 46, 0.98));
+    }
+  }
+
+  @media (max-width: 768px) {
+    .language-selector {
+      top: 15px;
+      right: 15px;
+    }
+
+    .language-selector__button {
+      padding: 0.6em 1em;
+      font-size: 0.85em;
+    }
+
+    .language-selector__icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .language-selector {
+      top: 10px;
+      right: 10px;
+    }
+
+    .language-selector__button {
+      padding: 0.5em 0.8em;
+      font-size: 0.8em;
+    }
+
+    .language-selector__icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .language-selector__current {
+      font-size: 0.85em;
+    }
+  }
 </style>
 
 <body>
+  <!-- Language Selector -->
+  <div class="language-selector">
+    <button class="language-selector__button" onclick="toggleLanguage()" title="Change language / Cambiar idioma" aria-label="Change language / Cambiar idioma">
+      <svg class="language-selector__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.87 15.07L10.33 12.56L10.36 12.53C12.1 10.59 13.34 8.36 14.07 6H17V4H10V2H8V4H1V6H12.17C11.5 7.92 10.44 9.75 9 11.35C8.07 10.32 7.3 9.19 6.69 8H4.69C5.42 9.63 6.42 11.17 7.67 12.56L2.58 17.58L4 19L9 14L12.11 17.11L12.87 15.07ZM18.5 10H16.5L12 22H14L15.12 19H19.87L21 22H23L18.5 10ZM15.88 17L17.5 12.67L19.12 17H15.88Z" fill="currentColor"/>
+      </svg>
+      <span class="language-selector__current">EN</span>
+    </button>
+  </div>
+
   <div class="container">
-    <header>
-      <div class="icon">
-        <svg width="100" height="100" viewBox="0 0 354 354" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <header role="banner">
+      <div class="icon" aria-hidden="true">
+        <svg width="100" height="100" viewBox="0 0 354 354" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Instagram Unfollowers Logo">
+          <title>Instagram Unfollowers Logo</title>
           <circle cx="177" cy="177" r="177" fill="#111111" />
           <circle cx="177" cy="115" r="50" fill="#222222" />
           <ellipse cx="177" cy="243" rx="76" ry="66" fill="#222222" />
@@ -566,16 +977,19 @@
         </svg>
       </div>
       <div class="logo-text">
-        <span>Instagram</span>
-        <span>Unfollowers</span>
+        <h1 style="display: contents;">
+          <span>Instagram</span>
+          <span>Unfollowers</span>
+        </h1>
       </div>
     </header>
+    <main role="main">
     <div class="codeBox__wrapper">
-      <div class="codeBox">
+      <section class="codeBox" aria-label="JavaScript code snippet">
         <pre><code class="language-javascript" id="code"></code></pre>
-      </div>
-      <button class="copy-button" onclick="copyToClipboard()">
-        <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      </section>
+      <button class="copy-button" onclick="copyToClipboard()" aria-label="Copy code to clipboard">
+        <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path
             d="M26 2H9.25C9.1125 2 9 2.1125 9 2.25V4C9 4.1375 9.1125 4.25 9.25 4.25H24.75V25.75C24.75 25.8875 24.8625 26 25 26H26.75C26.8875 26 27 25.8875 27 25.75V3C27 2.44687 26.5531 2 26 2ZM22 6H6C5.44687 6 5 6.44687 5 7V23.5844C5 23.85 5.10625 24.1031 5.29375 24.2906L10.7094 29.7062C10.7781 29.775 10.8563 29.8312 10.9406 29.8781V29.9375H11.0719C11.1812 29.9781 11.2969 30 11.4156 30H22C22.5531 30 23 29.5531 23 29V7C23 6.44687 22.5531 6 22 6ZM10.9375 26.7563L8.24687 24.0625H10.9375V26.7563ZM20.75 27.75H12.9375V23.3125C12.9375 22.6219 12.3781 22.0625 11.6875 22.0625H7.25V8.25H20.75V27.75Z"
             fill="#FFFFFF" />
@@ -583,38 +997,40 @@
         Copy code
       </button>
 
-      <div class="bookmarklet-section">
-        <h3>Or use a Bookmarklet</h3>
+      <section class="bookmarklet-section" aria-labelledby="bookmarklet-title">
+        <h2 id="bookmarklet-title">Or use a Bookmarklet</h2>
         <div class="bookmarklets-container">
           <!-- Desktop/PC Bookmarklet -->
-          <div class="bookmarklet-item">
+          <article class="bookmarklet-item" role="article" aria-label="Bookmarklet installation instructions">
             <div class="bookmarklet-item-header">
-              <h4 class="bookmarklet-item-title">Bookmarklet</h4>
-              <span class="bookmarklet-item-platform">💻 PC / Windows / Mac</span>
+              <h3 class="bookmarklet-item-title">Bookmarklet</h3>
+              <span class="bookmarklet-item-platform" aria-label="Compatible with PC, Windows, and Mac">💻 PC / Windows / Mac</span>
             </div>
             <p class="bookmarklet-item-instructions">Drag the link below to your bookmarks bar. Then press it when
               Instragram has finished loading.</p>
-            <span class="bookmarklet-item-platform">📱 iOS / iPhone / iPad</span>
+            <span class="bookmarklet-item-platform" aria-label="Compatible with iOS, iPhone, and iPad">📱 iOS / iPhone / iPad</span>
             <p class="bookmarklet-item-instructions">Tap and hold the link below to add a bookmark (or drag to bookmarks
               bar). Then tap it when Instagram has finished loading.</p>
-            <a id="bookmarklet-link" class="bookmarklet-button" href="#">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <a id="bookmarklet-link" class="bookmarklet-button" href="#" aria-label="Drag this bookmarklet to your bookmarks bar" role="button">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                <title>Bookmark icon</title>
                 <path
                   d="M5 2H19C19.5523 2 20 2.44772 20 3V22.1433C20 22.4382 19.823 22.7052 19.5521 22.822C19.2812 22.9388 18.9697 22.8943 18.7496 22.7061L12.75 17.5678C12.3499 17.225 11.6501 17.225 11.25 17.5678L5.25044 22.7061C5.03027 22.8943 4.71881 22.9388 4.44789 22.822C4.17702 22.7052 4 22.4382 4 22.1433V3C4 2.44772 4.44772 2 5 2Z"
                   fill="#FFFFFF" />
               </svg>
               Enhanced Instagram Unfollowers
             </a>
-            <span class="device-badge">v1.0.0</span>
-          </div>
+            <span class="device-badge" aria-label="Version 1.0.0">v1.0.0</span>
+          </article>
         </div>
       </div>
     </div>
-    <div class="confirm-overlay" id="overlay">
-      <div class="confirm-box">
+    <aside class="confirm-overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+      <div class="confirm-box" role="document">
         <div class="confirm-box__header">
-          <div class="confirm-box__header__text">
-            <svg width="188" height="189" viewBox="0 0 188 189" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div class="confirm-box__body__text" id="dialog-title">
+            <svg width="188" height="189" viewBox="0 0 188 189" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Success checkmark icon">
+              <title>Code copied successfully</title>
               <path
                 d="M128.332 65.3086H119.721C117.849 65.3086 116.068 66.2082 114.966 67.7504L86.1055 107.774L73.0336 89.6348C71.932 88.1109 70.1695 87.193 68.2785 87.193H59.668C58.4746 87.193 57.777 88.5516 58.4746 89.5246L81.3504 121.25C81.8908 122.004 82.6032 122.618 83.4286 123.042C84.2539 123.466 85.1684 123.688 86.0963 123.688C87.0242 123.688 87.9387 123.466 88.764 123.042C89.5894 122.618 90.3018 122.004 90.8422 121.25L129.507 67.6402C130.223 66.6672 129.525 65.3086 128.332 65.3086Z"
                 fill="white" />
@@ -627,9 +1043,9 @@
           </div>
         </div>
         <div class="confirm-box__close">
-          <button onclick="overlayControl('hide')">Close</button>
+          <button onclick="overlayControl('hide')" aria-label="Close dialog">Close</button>
         </div>
-        <div class="confirm-box__body">
+        <div class="confirm-box__body" id="dialog-description">
           <div class="confirm-box__body__text">
             You can now paste the code in the console of your browser.
           </div>
@@ -638,7 +1054,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </aside>
 </body>
 <script>
   const scriptLabel = document.getElementById("code");

@@ -7,6 +7,10 @@
 A nifty tool that lets you see who doesn't follow you back on Instagram.  
 <u>Browser-based and requires no downloads or installations!</u>
 
+### Quick Links
+- [🎥 Video Tutorial](#-video-tutorial)
+- [📚 How to Use](#-how-to-use-the-bookmarklet)
+
 ## ⚠️ WARNING
 
 This version utilizes the Instagram API for better performance.  
@@ -59,6 +63,12 @@ For Android users who want to use it on mobile:
 1. Download the latest version of [Eruda Android Browser](https://github.com/liriliri/eruda-android/releases/)
 2. Open Instagram web through the Eruda browser
 3. Follow the same steps as desktop (the console will be automatically available when clicking the eruda icon)
+
+## 🎥 Video Tutorial
+
+Watch our video tutorial to learn how to use the tool:
+
+[Instagram Reel Tutorial](https://www.instagram.com/reel/DTiSUXaDP0g/)
 
 ## 📚 How to Use the Bookmarklet
 

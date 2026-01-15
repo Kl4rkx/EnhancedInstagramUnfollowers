@@ -1,11 +1,15 @@
 # 📱 Enhanced Instagram Unfollowers
 
-[![Maintenance](https://img.shields.io/maintenance/yes/2025)](https://github.com/Kl4rkx/EnhancedInstagramUnfollowers)
+[![Maintenance](https://img.shields.io/maintenance/yes/2026)](https://github.com/Kl4rkx/EnhancedInstagramUnfollowers)
 
 *Lee esto en otros idiomas: [English](../README.md)*
 
 Una herramienta ingeniosa que te permite ver quién no te sigue de vuelta en Instagram.  
 <u>¡Basada en navegador y no requiere descargas ni instalaciones!</u>
+
+### Enlaces Rápidos
+- [🎥 Tutorial en Video](#-tutorial-en-video)
+- [📚 Cómo Usar](#-cómo-usar-el-bookmarklet)
 
 ## ⚠️ ADVERTENCIA
 
@@ -57,6 +61,12 @@ Para usuarios de Android que quieran usarlo en móvil:
 1. Descarga la última versión de [Eruda Android Browser](https://github.com/liriliri/eruda-android/releases/)
 2. Abre Instagram web a través del navegador Eruda
 3. Sigue los mismos pasos que en escritorio (la consola estará disponible automáticamente al hacer clic en el icono de eruda)
+
+## 🎥 Tutorial en Video
+
+Mira nuestro tutorial en video para aprender cómo usar la herramienta:
+
+[Reel de Instagram - Tutorial](https://www.instagram.com/reel/DTiSUXaDP0g/)
 
 ## 📚 Cómo Usar el Bookmarklet
 

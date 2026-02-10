@@ -1,14 +1,18 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { assertUnreachable, getMaxPage } from '../utils/utils';
 import { State } from '../model/state';
 import { UserNode } from '../model/user';
-import { WHITELISTED_RESULTS_STORAGE_KEY, UNFOLLOWERS_PER_PAGE } from '../constants/constants';
+import { UNFOLLOWERS_PER_PAGE } from '../constants/constants';
 import { TranslationKey } from '../constants/translations';
+import { ResultItem } from './ResultItem';
 
 
 export interface SearchingProps {
   state: State;
-  setState: (state: State) => void;
+  whitelistedResults: readonly UserNode[];
+  selectedIds: Set<string>;
+  onWhitelistUpdate: (users: readonly UserNode[]) => void;
+  setState: (state: State | ((prev: State) => State)) => void;
   scanningPaused: boolean;
   pauseScan: () => void;
   handleScanFilter: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -22,6 +26,9 @@ export interface SearchingProps {
 
 export const Searching = ({
   state,
+  whitelistedResults,
+  selectedIds,
+  onWhitelistUpdate,
   setState,
   scanningPaused,
   pauseScan,
@@ -33,68 +40,109 @@ export const Searching = ({
   setSidebarOpen,
   t,
 }: SearchingProps) => {
-  const scanningState = state.status === 'scanning' ? state : null;
+  // Granular extraction — only re-derive when the specific fields change
+  const currentTab = state.status === 'scanning' ? state.currentTab : 'non_whitelisted' as const;
+  const searchTerm = state.status === 'scanning' ? state.searchTerm : '';
+  const filter = state.status === 'scanning' ? state.filter : null;
+  const page = state.status === 'scanning' ? state.page : 1;
+  const selectedResults = state.status === 'scanning' ? state.selectedResults : [];
+
+  // Stable reference for results — avoids creating a new [] on every render when not scanning
+  const scanningResults = state.status === 'scanning' ? state.results : null;
+  const results = useMemo(
+    () => scanningResults ?? [],
+    [scanningResults],
+  );
 
   const whitelistedIds = useMemo(
-    () => new Set(scanningState?.whitelistedResults.map(user => user.id) ?? []),
-    [scanningState?.whitelistedResults],
+    () => new Set(whitelistedResults.map(user => user.id)),
+    [whitelistedResults],
   );
 
   const usersForDisplay = useMemo(() => {
-    if (!scanningState) {
+    if (!filter) {
       return [];
     }
-    const searchTerm = scanningState.searchTerm.toLowerCase();
+    const term = searchTerm.toLowerCase();
     const filtered: UserNode[] = [];
-    for (const result of scanningState.results) {
+    for (const result of results) {
       const isWhitelisted = whitelistedIds.has(result.id);
-      if (scanningState.currentTab === 'non_whitelisted' && isWhitelisted) {
+      if (currentTab === 'non_whitelisted' && isWhitelisted) {
         continue;
       }
-      if (scanningState.currentTab === 'whitelisted' && !isWhitelisted) {
+      if (currentTab === 'whitelisted' && !isWhitelisted) {
         continue;
       }
-      if (!scanningState.filter.showPrivate && result.is_private) {
+      if (!filter.showPrivate && result.is_private) {
         continue;
       }
-      if (!scanningState.filter.showVerified && result.is_verified) {
+      if (!filter.showVerified && result.is_verified) {
         continue;
       }
-      if (!scanningState.filter.showFollowers && result.follows_viewer) {
+      if (!filter.showFollowers && result.follows_viewer) {
         continue;
       }
-      if (!scanningState.filter.showNonFollowers && !result.follows_viewer) {
+      if (!filter.showNonFollowers && !result.follows_viewer) {
         continue;
       }
-      if (!scanningState.filter.showWithOutProfilePicture && result.profile_pic_url.includes('default_profile_400x400')) {
+      if (!filter.showWithOutProfilePicture && result.profile_pic_url.includes('default_profile_400x400')) {
         continue;
       }
       if (
-        scanningState.searchTerm !== '' &&
-        !(result.username.toLowerCase().includes(searchTerm) || result.full_name.toLowerCase().includes(searchTerm))
+        searchTerm !== '' &&
+        !(result.username.toLowerCase().includes(term) || result.full_name.toLowerCase().includes(term))
       ) {
         continue;
       }
       filtered.push(result);
     }
     return filtered;
-  }, [scanningState, whitelistedIds]);
+  }, [results, whitelistedIds, currentTab, filter, searchTerm]);
 
-  const sortedUsersForDisplay = useMemo(() => [...usersForDisplay].sort((a, b) => (a.username > b.username ? 1 : -1)), [usersForDisplay]);
+  const sortedUsersForDisplay = useMemo(
+    () => [...usersForDisplay].sort((a, b) => (a.username > b.username ? 1 : -1)),
+    [usersForDisplay],
+  );
 
   const pageUsers = useMemo(() => {
-    const page = scanningState?.page ?? 1;
     const start = UNFOLLOWERS_PER_PAGE * (page - 1);
     return sortedUsersForDisplay.slice(start, start + UNFOLLOWERS_PER_PAGE);
-  }, [sortedUsersForDisplay, scanningState]);
+  }, [sortedUsersForDisplay, page]);
 
   const maxPage = useMemo(() => getMaxPage(sortedUsersForDisplay), [sortedUsersForDisplay]);
+
+  // Pre-compute letters for page users
+  const pageUsersWithLetters = useMemo(() => {
+    let prevLetter = '';
+    return pageUsers.map(user => {
+      const letter = user.username.substring(0, 1).toUpperCase();
+      const showLetter = letter !== prevLetter;
+      if (showLetter) {
+        prevLetter = letter;
+      }
+      return { user, showLetter, letter };
+    });
+  }, [pageUsers]);
+
+  // Callback for whitelist toggle from ResultItem — stable reference
+  const onWhitelistToggle = useCallback((user: UserNode) => {
+    let updated: readonly UserNode[];
+    switch (currentTab) {
+      case 'non_whitelisted':
+        updated = [...whitelistedResults, user];
+        break;
+      case 'whitelisted':
+        updated = whitelistedResults.filter(r => r.id !== user.id);
+        break;
+      default:
+        assertUnreachable(currentTab);
+    }
+    onWhitelistUpdate(updated);
+  }, [currentTab, whitelistedResults, onWhitelistUpdate]);
 
   if (state.status !== 'scanning') {
     return null;
   }
-
-  let currentLetter = '';
 
   return (
     <section className='flex'>
@@ -164,7 +212,7 @@ export const Searching = ({
           <p>{t('displayed')}: {sortedUsersForDisplay.length}</p>
           <p>{t('total')}: {state.results.length}</p>
           <p className='whitelist-counter'>
-            <span className='whitelist-badge'>★</span> {t('whitelistedCount')}: {state.whitelistedResults.length}
+            <span className='whitelist-badge'>★</span> {t('whitelistedCount')}: {whitelistedResults.length}
           </p>
         </div>
         {/* Scan controls */}
@@ -240,7 +288,7 @@ export const Searching = ({
             });
           }}
         >
-          {t('unfollow')} ({state.selectedResults.length})
+          {t('unfollow')} ({selectedResults.length})
         </button>
       </aside>
       <article className='results-container'>
@@ -277,88 +325,20 @@ export const Searching = ({
           </div>
         </nav>
         <div className='results-list'>
-          {pageUsers.map(user => {
-          const firstLetter = user.username.substring(0, 1).toUpperCase();
-          const showLetter = firstLetter !== currentLetter;
-          if (showLetter) {
-            currentLetter = firstLetter;
-          }
-          return (
-            <React.Fragment key={user.id}>
-              {showLetter && <div className='alphabet-character' key={`letter-${firstLetter}`}>{firstLetter}</div>}
-              <label className='result-item'>
-                <div className='flex grow align-center'>
-                  <div
-                    className='avatar-container'
-                    onClick={e => {
-                      // Prevent selecting result when trying to add to whitelist.
-                      e.preventDefault();
-                      e.stopPropagation();
-                      let whitelistedResults: readonly UserNode[] = [];
-                      switch (state.currentTab) {
-                        case 'non_whitelisted':
-                          whitelistedResults = [...state.whitelistedResults, user];
-                          break;
-
-                        case 'whitelisted':
-                          whitelistedResults = state.whitelistedResults.filter(
-                            result => result.id !== user.id,
-                          );
-                          break;
-
-                        default:
-                          assertUnreachable(state.currentTab);
-                      }
-                      localStorage.setItem(
-                        WHITELISTED_RESULTS_STORAGE_KEY,
-                        JSON.stringify(whitelistedResults),
-                      );
-                      setState({ ...state, whitelistedResults });
-                    }}
-                  >
-                    <img
-                      className='avatar'
-                      alt={user.username}
-                      src={user.profile_pic_url}
-                      loading='lazy'
-                      decoding='async'
-                    />
-                    <span className='avatar-icon-overlay-container'>
-                      {state.currentTab === 'non_whitelisted' ? (
-                        <UserCheckIcon />
-                      ) : (
-                        <UserUncheckIcon />
-                      )}
-                    </span>
-                  </div>
-                  <div className='flex column m-medium'>
-                    <a
-                      className='fs-xlarge'
-                      target='_blank'
-                      href={`/${user.username}`}
-                      rel='noreferrer'
-                    >
-                      {user.username}
-                    </a>
-                    <span className='fs-medium'>{user.full_name}</span>
-                  </div>
-                  {user.is_verified && <div className='verified-badge'>✔</div>}
-                  {user.is_private && (
-                    <div className='flex justify-center w-100'>
-                      <span className='private-indicator'>Private</span>
-                    </div>
-                  )}
-                </div>
-                <input
-                  className='account-checkbox'
-                  type='checkbox'
-                  checked={state.selectedResults.some(selected => selected.id === user.id)}
-                  onChange={e => toggleUser(e.currentTarget.checked, user)}
-                />
-              </label>
-            </React.Fragment>
-          );
-        })}
+          {pageUsersWithLetters.map(({ user, showLetter, letter }) => (
+            <ResultItem
+              key={user.id}
+              user={user}
+              isSelected={selectedIds.has(user.id)}
+              currentTab={state.currentTab}
+              showLetter={showLetter}
+              firstLetter={letter}
+              toggleUser={toggleUser}
+              onWhitelistToggle={onWhitelistToggle}
+              UserCheckIcon={UserCheckIcon}
+              UserUncheckIcon={UserUncheckIcon}
+            />
+          ))}
         </div>
       </article>
     </section>

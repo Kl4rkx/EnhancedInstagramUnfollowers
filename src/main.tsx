@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 // eslint-disable-next-line react/no-deprecated -- Preact/compat provides render(), not createRoot
 import { render } from 'react-dom';
 import './styles.scss';
@@ -47,6 +47,9 @@ function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Independent whitelist state that works across ALL statuses (initial, scanning, unfollowing)
+  const [whitelistedResults, setWhitelistedResults] = useState<readonly UserNode[]>(() => loadWhitelist());
+
   // TODO FOR NEXT UPDATE SAVE THIS IN STORAGE
   const [timings, setTimings] = useState<Timings>(
     {
@@ -56,6 +59,15 @@ function App() {
       timeToWaitAfterFiveUnfollows: DEFAULT_TIME_TO_WAIT_AFTER_FIVE_UNFOLLOWS,
     },
   );
+
+  // O(1) lookup Set for selected results, rebuilt only when selectedResults changes
+  const scanningSelectedResults = state.status === 'scanning' ? state.selectedResults : null;
+  const selectedIds = useMemo(() => {
+    if (scanningSelectedResults) {
+      return new Set(scanningSelectedResults.map(u => u.id));
+    }
+    return new Set<string>();
+  }, [scanningSelectedResults]);
 
 
   let isActiveProcess: boolean;
@@ -71,11 +83,12 @@ function App() {
       assertUnreachable(state);
   }
 
-  const onScan = async () => {
+  const onScan = useCallback(async () => {
     if (state.status !== 'initial') {
       return;
     }
-    const whitelistedResults = loadWhitelist();
+    // Refresh whitelist from localStorage when starting a scan
+    setWhitelistedResults(loadWhitelist());
     setState({
       status: 'scanning',
       page: 1,
@@ -84,7 +97,6 @@ function App() {
       percentage: 0,
       results: [],
       selectedResults: [],
-      whitelistedResults,
       filter: {
         showNonFollowers: true,
         showFollowers: false,
@@ -93,122 +105,125 @@ function App() {
         showWithOutProfilePicture: true,
       },
     });
-  };
+  }, [state.status]);
 
-  const handleScanFilter = (e: ChangeEvent<HTMLInputElement>) => {
-    if (state.status !== 'scanning') {
-      return;
-    }
-    if (state.selectedResults.length > 0) {
-      if (!confirm('Changing filter options will clear selected users')) {
-        // Force re-render. Bit of a hack but had an issue where the checkbox state was still
-        // changing in the UI even even when not confirming. So updating the state fixes this
-        // by synchronizing the checkboxes with the filter statuses in the state.
-        setState({ ...state });
-        return;
+  const handleScanFilter = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const name = e.currentTarget.name;
+    const checked = e.currentTarget.checked;
+    setState(prev => {
+      if (prev.status !== 'scanning') {
+        return prev;
       }
-    }
-    setState({
-      ...state,
-      // Make sure to clear selected results when changing filter options. This is to avoid having
-      // users selected in the unfollow queue but not visible in the UI, which would be confusing.
-      selectedResults: [],
-      filter: {
-        ...state.filter,
-        [e.currentTarget.name]: e.currentTarget.checked,
-      },
-    });
-  };
-
-  const handleUnfollowFilter = (e: ChangeEvent<HTMLInputElement>) => {
-    if (state.status !== 'unfollowing') {
-      return;
-    }
-    setState({
-      ...state,
-      filter: {
-        ...state.filter,
-        [e.currentTarget.name]: e.currentTarget.checked,
-      },
-    });
-  };
-
-  const toggleUser = (newStatus: boolean, user: UserNode) => {
-    if (state.status !== 'scanning') {
-      return;
-    }
-    if (newStatus) {
-      setState({
-        ...state,
-        selectedResults: [...state.selectedResults, user],
-      });
-    } else {
-      setState({
-        ...state,
-        selectedResults: state.selectedResults.filter(result => result.id !== user.id),
-      });
-    }
-  };
-
-  const toggleAllUsers = (e: ChangeEvent<HTMLInputElement>) => {
-    if (state.status !== 'scanning') {
-      return;
-    }
-    if (e.currentTarget.checked) {
-      setState({
-        ...state,
-        selectedResults: getUsersForDisplay(
-          state.results,
-          state.whitelistedResults,
-          state.currentTab,
-          state.searchTerm,
-          state.filter,
-        ),
-      });
-    } else {
-      setState({
-        ...state,
+      if (prev.selectedResults.length > 0) {
+        if (!confirm('Changing filter options will clear selected users')) {
+          return { ...prev };
+        }
+      }
+      return {
+        ...prev,
         selectedResults: [],
-      });
-    }
-  };
+        filter: {
+          ...prev.filter,
+          [name]: checked,
+        },
+      };
+    });
+  }, []);
+
+  const handleUnfollowFilter = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const name = e.currentTarget.name;
+    const checked = e.currentTarget.checked;
+    setState(prev => {
+      if (prev.status !== 'unfollowing') {
+        return prev;
+      }
+      return {
+        ...prev,
+        filter: {
+          ...prev.filter,
+          [name]: checked,
+        },
+      };
+    });
+  }, []);
+
+  const toggleUser = useCallback((newStatus: boolean, user: UserNode) => {
+    setState(prev => {
+      if (prev.status !== 'scanning') {
+        return prev;
+      }
+      if (newStatus) {
+        return {
+          ...prev,
+          selectedResults: [...prev.selectedResults, user],
+        };
+      }
+      return {
+        ...prev,
+        selectedResults: prev.selectedResults.filter(result => result.id !== user.id),
+      };
+    });
+  }, []);
+
+  const toggleAllUsers = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const checked = e.currentTarget.checked;
+    setState(prev => {
+      if (prev.status !== 'scanning') {
+        return prev;
+      }
+      if (checked) {
+        return {
+          ...prev,
+          selectedResults: getUsersForDisplay(
+            prev.results,
+            whitelistedResults,
+            prev.currentTab,
+            prev.searchTerm,
+            prev.filter,
+          ),
+        };
+      }
+      return {
+        ...prev,
+        selectedResults: [],
+      };
+    });
+  }, [whitelistedResults]);
 
   // it will work the same as toggleAllUsers, but it will select everyone on the current page.
-  const toggleCurrentePageUsers = (e: ChangeEvent<HTMLInputElement>) => {
-    if (state.status !== 'scanning') {
-      return;
-    }
-    if (e.currentTarget.checked) {
-      setState({
-        ...state,
-        selectedResults: getCurrentPageUnfollowers(
-          getUsersForDisplay(
-            state.results,
-            state.whitelistedResults,
-            state.currentTab,
-            state.searchTerm,
-            state.filter,
+  const toggleCurrentePageUsers = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const checked = e.currentTarget.checked;
+    setState(prev => {
+      if (prev.status !== 'scanning') {
+        return prev;
+      }
+      if (checked) {
+        return {
+          ...prev,
+          selectedResults: getCurrentPageUnfollowers(
+            getUsersForDisplay(
+              prev.results,
+              whitelistedResults,
+              prev.currentTab,
+              prev.searchTerm,
+              prev.filter,
+            ),
+            prev.page,
           ),
-          state.page,
-        ),
-      });
-    } else {
-      setState({
-        ...state,
+        };
+      }
+      return {
+        ...prev,
         selectedResults: [],
-      });
-    }
-  };
+      };
+    });
+  }, [whitelistedResults]);
 
-  const onWhitelistUpdate = (updatedWhitelist: readonly UserNode[]) => {
+  const onWhitelistUpdate = useCallback((updatedWhitelist: readonly UserNode[]) => {
     saveWhitelist(updatedWhitelist);
-    if (state.status === 'scanning') {
-      setState({
-        ...state,
-        whitelistedResults: updatedWhitelist,
-      });
-    }
-  };
+    // Always update the independent whitelist state, regardless of app status
+    setWhitelistedResults(updatedWhitelist);
+  }, []);
 
   useEffect(() => {
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -396,6 +411,9 @@ function App() {
     case 'scanning': {
       markup = <Searching
         state={state}
+        whitelistedResults={whitelistedResults}
+        selectedIds={selectedIds}
+        onWhitelistUpdate={onWhitelistUpdate}
         handleScanFilter={handleScanFilter}
         toggleUser={toggleUser}
         pauseScan={pauseScan}
@@ -428,12 +446,13 @@ function App() {
         <Toolbar
           state={state}
           setState={setState}
+          selectedIds={selectedIds}
           isActiveProcess={isActiveProcess}
           toggleAllUsers={toggleAllUsers}
           toggleCurrentePageUsers={toggleCurrentePageUsers}
           setTimings={setTimings}
           currentTimings={timings}
-          whitelistedUsers={state.status === 'scanning' ? state.whitelistedResults : loadWhitelist()}
+          whitelistedUsers={whitelistedResults}
           onWhitelistUpdate={onWhitelistUpdate}
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}

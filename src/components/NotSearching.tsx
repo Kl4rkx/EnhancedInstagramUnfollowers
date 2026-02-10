@@ -8,6 +8,6 @@ interface NotSearchingProps {
 
 export const NotSearching = ({onScan, t}: NotSearchingProps) => (
   <button className='run-scan' onClick={onScan}>
-    {t("run")}
+    {t('run')}
   </button>
 );

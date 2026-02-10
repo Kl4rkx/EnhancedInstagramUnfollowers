@@ -1,10 +1,10 @@
-import { UserNode } from "./user";
-import { ScanningTab } from "./scanning-tab";
-import { ScanningFilter } from "./scanning-filter";
-import { UnfollowLogEntry } from "./unfollow-log-entry";
-import { UnfollowFilter } from "./unfollow-filter";
+import { UserNode } from './user';
+import { ScanningTab } from './scanning-tab';
+import { ScanningFilter } from './scanning-filter';
+import { UnfollowLogEntry } from './unfollow-log-entry';
+import { UnfollowFilter } from './unfollow-filter';
 
-type ScanningState = {
+interface ScanningState {
   readonly status: 'scanning';
   readonly page: number;
   readonly currentTab: ScanningTab;
@@ -14,16 +14,16 @@ type ScanningState = {
   readonly whitelistedResults: readonly UserNode[];
   readonly selectedResults: readonly UserNode[];
   readonly filter: ScanningFilter;
-};
+}
 
-type UnfollowingState = {
+interface UnfollowingState {
   readonly status: 'unfollowing';
   readonly searchTerm: string;
   readonly percentage: number;
   readonly selectedResults: readonly UserNode[];
   readonly unfollowLog: readonly UnfollowLogEntry[];
   readonly filter: UnfollowFilter;
-};
+}
 
-//TODO THIS TYPE OF MULTIPLE STATE NEEDS TO BE SEPARETED IN DIFFERENT FILES ASAP (Global state,unfollowing state, scanning state etc...)
+// TODO THIS TYPE OF MULTIPLE STATE NEEDS TO BE SEPARETED IN DIFFERENT FILES ASAP (Global state,unfollowing state, scanning state etc...)
 export type State = { readonly status: 'initial' } | ScanningState | UnfollowingState;

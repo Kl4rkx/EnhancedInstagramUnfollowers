@@ -1,29 +1,30 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { render } from "react-dom";
-import "./styles.scss";
+import React, { ChangeEvent, useEffect, useState } from 'react';
+// eslint-disable-next-line react/no-deprecated -- Preact/compat provides render(), not createRoot
+import { render } from 'react-dom';
+import './styles.scss';
 
-import { User, UserNode } from "./model/user";
-import { Toast } from "./components/Toast";
-import { UserCheckIcon } from "./components/icons/UserCheckIcon";
-import { UserUncheckIcon } from "./components/icons/UserUncheckIcon";
+import { User, UserNode } from './model/user';
+import { Toast } from './components/Toast';
+import { UserCheckIcon } from './components/icons/UserCheckIcon';
+import { UserUncheckIcon } from './components/icons/UserUncheckIcon';
 import { DEFAULT_TIME_BETWEEN_SEARCH_CYCLES,
   DEFAULT_TIME_BETWEEN_UNFOLLOWS,
   DEFAULT_TIME_TO_WAIT_AFTER_FIVE_SEARCH_CYCLES,
-  DEFAULT_TIME_TO_WAIT_AFTER_FIVE_UNFOLLOWS, INSTAGRAM_HOSTNAME, BLOCKED_USERS } from "./constants/constants";
+  DEFAULT_TIME_TO_WAIT_AFTER_FIVE_UNFOLLOWS, INSTAGRAM_HOSTNAME, BLOCKED_USERS } from './constants/constants';
 import {
   assertUnreachable,
   getCookie,
   getCurrentPageUnfollowers,
   getUsersForDisplay, sleep, unfollowUserUrlGenerator, urlGenerator,
-} from "./utils/utils";
-import { NotSearching } from "./components/NotSearching";
-import { State } from "./model/state";
-import { Searching } from "./components/Searching";
-import { Toolbar } from "./components/Toolbar";
-import { Unfollowing } from "./components/Unfollowing";
-import { Timings } from "./model/timings";
-import { loadWhitelist, saveWhitelist } from "./utils/whitelist-manager";
-import { useTranslation } from "./hooks/useTranslation";
+} from './utils/utils';
+import { NotSearching } from './components/NotSearching';
+import { State } from './model/state';
+import { Searching } from './components/Searching';
+import { Toolbar } from './components/Toolbar';
+import { Unfollowing } from './components/Unfollowing';
+import { Timings } from './model/timings';
+import { loadWhitelist, saveWhitelist } from './utils/whitelist-manager';
+import { useTranslation } from './hooks/useTranslation';
 
 // pause
 let scanningPaused = false;
@@ -35,9 +36,9 @@ function pauseScan() {
 
 function App() {
   const { language, setLanguage, t } = useTranslation();
-  
+
   const [state, setState] = useState<State>({
-    status: "initial",
+    status: 'initial',
   });
 
   const [toast, setToast] = useState<{ readonly show: false } | { readonly show: true; readonly text: string }>({
@@ -46,24 +47,24 @@ function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  //TODO FOR NEXT UPDATE SAVE THIS IN STORAGE
+  // TODO FOR NEXT UPDATE SAVE THIS IN STORAGE
   const [timings, setTimings] = useState<Timings>(
     {
       timeBetweenSearchCycles: DEFAULT_TIME_BETWEEN_SEARCH_CYCLES,
       timeToWaitAfterFiveSearchCycles: DEFAULT_TIME_TO_WAIT_AFTER_FIVE_SEARCH_CYCLES,
       timeBetweenUnfollows: DEFAULT_TIME_BETWEEN_UNFOLLOWS,
       timeToWaitAfterFiveUnfollows: DEFAULT_TIME_TO_WAIT_AFTER_FIVE_UNFOLLOWS,
-    }
+    },
   );
 
 
   let isActiveProcess: boolean;
   switch (state.status) {
-    case "initial":
+    case 'initial':
       isActiveProcess = false;
       break;
-    case "scanning":
-    case "unfollowing":
+    case 'scanning':
+    case 'unfollowing':
       isActiveProcess = state.percentage < 100;
       break;
     default:
@@ -71,15 +72,15 @@ function App() {
   }
 
   const onScan = async () => {
-    if (state.status !== "initial") {
+    if (state.status !== 'initial') {
       return;
     }
     const whitelistedResults = loadWhitelist();
     setState({
-      status: "scanning",
+      status: 'scanning',
       page: 1,
-      searchTerm: "",
-      currentTab: "non_whitelisted",
+      searchTerm: '',
+      currentTab: 'non_whitelisted',
       percentage: 0,
       results: [],
       selectedResults: [],
@@ -95,11 +96,11 @@ function App() {
   };
 
   const handleScanFilter = (e: ChangeEvent<HTMLInputElement>) => {
-    if (state.status !== "scanning") {
+    if (state.status !== 'scanning') {
       return;
     }
     if (state.selectedResults.length > 0) {
-      if (!confirm("Changing filter options will clear selected users")) {
+      if (!confirm('Changing filter options will clear selected users')) {
         // Force re-render. Bit of a hack but had an issue where the checkbox state was still
         // changing in the UI even even when not confirming. So updating the state fixes this
         // by synchronizing the checkboxes with the filter statuses in the state.
@@ -120,7 +121,7 @@ function App() {
   };
 
   const handleUnfollowFilter = (e: ChangeEvent<HTMLInputElement>) => {
-    if (state.status !== "unfollowing") {
+    if (state.status !== 'unfollowing') {
       return;
     }
     setState({
@@ -133,7 +134,7 @@ function App() {
   };
 
   const toggleUser = (newStatus: boolean, user: UserNode) => {
-    if (state.status !== "scanning") {
+    if (state.status !== 'scanning') {
       return;
     }
     if (newStatus) {
@@ -150,7 +151,7 @@ function App() {
   };
 
   const toggleAllUsers = (e: ChangeEvent<HTMLInputElement>) => {
-    if (state.status !== "scanning") {
+    if (state.status !== 'scanning') {
       return;
     }
     if (e.currentTarget.checked) {
@@ -174,7 +175,7 @@ function App() {
 
   // it will work the same as toggleAllUsers, but it will select everyone on the current page.
   const toggleCurrentePageUsers = (e: ChangeEvent<HTMLInputElement>) => {
-    if (state.status !== "scanning") {
+    if (state.status !== 'scanning') {
       return;
     }
     if (e.currentTarget.checked) {
@@ -201,7 +202,7 @@ function App() {
 
   const onWhitelistUpdate = (updatedWhitelist: readonly UserNode[]) => {
     saveWhitelist(updatedWhitelist);
-    if (state.status === "scanning") {
+    if (state.status === 'scanning') {
       setState({
         ...state,
         whitelistedResults: updatedWhitelist,
@@ -225,19 +226,19 @@ function App() {
       // For IE and Firefox prior to version 4
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (e) {
-        e.returnValue = "Changes you made may not be saved.";
+        e.returnValue = 'Changes you made may not be saved.';
       }
 
       // For Safari
-      return "Changes you made may not be saved.";
+      return 'Changes you made may not be saved.';
     };
-    window.addEventListener("beforeunload", onBeforeUnload);
-    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => window.removeEventListener('beforeunload', onBeforeUnload);
   }, [isActiveProcess, state]);
 
   useEffect(() => {
     const scan = async () => {
-      if (state.status !== "scanning") {
+      if (state.status !== 'scanning') {
         return;
       }
       const results = [...state.results];
@@ -271,7 +272,7 @@ function App() {
         });
 
         setState(prevState => {
-          if (prevState.status !== "scanning") {
+          if (prevState.status !== 'scanning') {
             return prevState;
           }
           const newState: State = {
@@ -287,19 +288,19 @@ function App() {
         // Pause scanning if user requested so.
         while (scanningPaused) {
           await sleep(1000);
-          console.info("Scan paused");
+          console.info('Scan paused');
         }
 
         await sleep(Math.floor(Math.random() * (timings.timeBetweenSearchCycles - timings.timeBetweenSearchCycles * 0.7)) + timings.timeBetweenSearchCycles);
         scrollCycle++;
         if (scrollCycle > 6) {
           scrollCycle = 0;
-          setToast({ show: true, text: t("sleepingToPreventBlock", { seconds: String(timings.timeToWaitAfterFiveSearchCycles / 1000) }) });
+          setToast({ show: true, text: t('sleepingToPreventBlock', { seconds: String(timings.timeToWaitAfterFiveSearchCycles / 1000) }) });
           await sleep(timings.timeToWaitAfterFiveSearchCycles);
         }
         setToast({ show: false });
       }
-      setToast({ show: true, text: t("scanningCompleted") });
+      setToast({ show: true, text: t('scanningCompleted') });
     };
     scan();
     // Dependency array not entirely legit, but works this way. TODO: Find a way to fix.
@@ -308,13 +309,13 @@ function App() {
 
   useEffect(() => {
     const unfollow = async () => {
-      if (state.status !== "unfollowing") {
+      if (state.status !== 'unfollowing') {
         return;
       }
 
-      const csrftoken = getCookie("csrftoken");
+      const csrftoken = getCookie('csrftoken');
       if (csrftoken === null) {
-        throw new Error("csrftoken cookie is null");
+        throw new Error('csrftoken cookie is null');
       }
 
       let counter = 0;
@@ -326,15 +327,15 @@ function App() {
         try {
           await fetch(unfollowUserUrlGenerator(user.id), {
             headers: {
-              "content-type": "application/x-www-form-urlencoded",
-              "x-csrftoken": csrftoken,
+              'content-type': 'application/x-www-form-urlencoded',
+              'x-csrftoken': csrftoken,
             },
-            method: "POST",
-            mode: "cors",
-            credentials: "include",
+            method: 'POST',
+            mode: 'cors',
+            credentials: 'include',
           });
           setState(prevState => {
-            if (prevState.status !== "unfollowing") {
+            if (prevState.status !== 'unfollowing') {
               return prevState;
             }
             return {
@@ -352,7 +353,7 @@ function App() {
         } catch (e) {
           console.error(e);
           setState(prevState => {
-            if (prevState.status !== "unfollowing") {
+            if (prevState.status !== 'unfollowing') {
               return prevState;
             }
             return {
@@ -375,7 +376,7 @@ function App() {
         await sleep(Math.floor(Math.random() * (timings.timeBetweenUnfollows * 1.2 - timings.timeBetweenUnfollows)) + timings.timeBetweenUnfollows);
 
         if (counter % 5 === 0) {
-          setToast({ show: true, text: t("sleepingMinutesToPreventBlock", { minutes: String(timings.timeToWaitAfterFiveUnfollows / 60000) }) });
+          setToast({ show: true, text: t('sleepingMinutesToPreventBlock', { minutes: String(timings.timeToWaitAfterFiveUnfollows / 60000) }) });
           await sleep(timings.timeToWaitAfterFiveUnfollows);
         }
         setToast({ show: false });
@@ -388,11 +389,11 @@ function App() {
 
   let markup: React.JSX.Element;
   switch (state.status) {
-    case "initial":
-      markup = <NotSearching onScan={onScan} t={t}></NotSearching>;
+    case 'initial':
+      markup = <NotSearching onScan={onScan} t={t} />;
       break;
 
-    case "scanning": {
+    case 'scanning': {
       markup = <Searching
         state={state}
         handleScanFilter={handleScanFilter}
@@ -405,16 +406,16 @@ function App() {
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
         t={t}
-      ></Searching>;
+       />;
       break;
     }
 
-    case "unfollowing":
+    case 'unfollowing':
       markup = <Unfollowing
         state={state}
         handleUnfollowFilter={handleUnfollowFilter}
         t={t}
-      ></Unfollowing>;
+       />;
       break;
 
     default:
@@ -422,8 +423,8 @@ function App() {
   }
 
   return (
-    <main id="main" role="main" className="iu">
-      <section className="overlay">
+    <main id='main' role='main' className='iu'>
+      <section className='overlay'>
         <Toolbar
           state={state}
           setState={setState}
@@ -432,14 +433,14 @@ function App() {
           toggleCurrentePageUsers={toggleCurrentePageUsers}
           setTimings={setTimings}
           currentTimings={timings}
-          whitelistedUsers={state.status === "scanning" ? state.whitelistedResults : loadWhitelist()}
+          whitelistedUsers={state.status === 'scanning' ? state.whitelistedResults : loadWhitelist()}
           onWhitelistUpdate={onWhitelistUpdate}
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
           language={language}
           setLanguage={setLanguage}
           t={t}
-        ></Toolbar>
+         />
 
         {markup}
 
@@ -450,9 +451,9 @@ function App() {
 }
 
 if (location.hostname !== INSTAGRAM_HOSTNAME) {
-  alert("Can be used only on Instagram routes");
+  alert('Can be used only on Instagram routes');
 } else {
-  document.title = "EnhancedInstagramUnfollowers";
-  document.body.innerHTML = "";
+  document.title = 'EnhancedInstagramUnfollowers';
+  document.body.innerHTML = '';
   render(<App />, document.body);
 }

@@ -1,9 +1,9 @@
-import { UserNode } from "../model/user";
-import { UNFOLLOWERS_PER_PAGE, WITHOUT_PROFILE_PICTURE_URL_IDS, BLOCKED_USERS } from "../constants/constants";
-import { ScanningTab } from "../model/scanning-tab";
-import { ScanningFilter } from "../model/scanning-filter";
-import { UnfollowLogEntry } from "../model/unfollow-log-entry";
-import { UnfollowFilter } from "../model/unfollow-filter";
+import { UserNode } from '../model/user';
+import { UNFOLLOWERS_PER_PAGE, WITHOUT_PROFILE_PICTURE_URL_IDS, BLOCKED_USERS } from '../constants/constants';
+import { ScanningTab } from '../model/scanning-tab';
+import { ScanningFilter } from '../model/scanning-filter';
+import { UnfollowLogEntry } from '../model/unfollow-log-entry';
+import { UnfollowFilter } from '../model/unfollow-filter';
 
 export async function copyListToClipboard(nonFollowersList: readonly UserNode[]): Promise<void> {
   const sortedList = [...nonFollowersList].sort((a, b) => (a.username > b.username ? 1 : -1));
@@ -27,6 +27,18 @@ export function getCurrentPageUnfollowers(nonFollowersList: readonly UserNode[],
   return sortedList.splice(UNFOLLOWERS_PER_PAGE * (currentPage - 1), UNFOLLOWERS_PER_PAGE);
 }
 
+/**
+ * When writing a switch-case with a finite number of cases, use this function in the
+ * `default` clause of switch-case statements for exhaustive checking. This will make
+ * TS complain until ALL cases are handled. For example, if we have a switch-case
+ * in-which we evaluate every possible status of a component's state, if we add this
+ * to the default clause and then add a new status to the state type, TS will complain
+ * and force us to handle it as well, thus avoiding forgetting it.
+ */
+export function assertUnreachable(_value: never): never {
+  throw new Error('Statement should be unreachable');
+}
+
 export function getUsersForDisplay(
   results: readonly UserNode[],
   whitelistedResults: readonly UserNode[],
@@ -42,12 +54,12 @@ export function getUsersForDisplay(
     }
     const isWhitelisted = whitelistedResults.find(user => user.id === result.id) !== undefined;
     switch (currentTab) {
-      case "non_whitelisted":
+      case 'non_whitelisted':
         if (isWhitelisted) {
           continue;
         }
         break;
-      case "whitelisted":
+      case 'whitelisted':
         if (!isWhitelisted) {
           continue;
         }
@@ -73,7 +85,7 @@ export function getUsersForDisplay(
     const userMatchesSearchTerm =
       result.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       result.full_name.toLowerCase().includes(searchTerm.toLowerCase());
-    if (searchTerm !== "" && !userMatchesSearchTerm) {
+    if (searchTerm !== '' && !userMatchesSearchTerm) {
       continue;
     }
     users.push(result);
@@ -91,24 +103,12 @@ export function getUnfollowLogForDisplay(log: readonly UnfollowLogEntry[], searc
       continue;
     }
     const userMatchesSearchTerm = entry.user.username.toLowerCase().includes(searchTerm.toLowerCase());
-    if (searchTerm !== "" && !userMatchesSearchTerm) {
+    if (searchTerm !== '' && !userMatchesSearchTerm) {
       continue;
     }
     entries.push(entry);
   }
   return entries;
-}
-
-/**
- * When writing a switch-case with a finite number of cases, use this function in the
- * `default` clause of switch-case statements for exhaustive checking. This will make
- * TS complain until ALL cases are handled. For example, if we have a switch-case
- * in-which we evaluate every possible status of a component's state, if we add this
- * to the default clause and then add a new status to the state type, TS will complain
- * and force us to handle it as well, thus avoiding forgetting it.
- */
-export function assertUnreachable(_value: never): never {
-  throw new Error('Statement should be unreachable');
 }
 
 export function sleep(ms: number): Promise<any> {

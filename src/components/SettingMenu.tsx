@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Timings } from "../model/timings";
-import { UserNode } from "../model/user";
-import { WhitelistManager } from "./WhitelistManager";
-import { TranslationKey } from "../constants/translations";
+import React, { useState } from 'react';
+import { Timings } from '../model/timings';
+import { UserNode } from '../model/user';
+import { WhitelistManager } from './WhitelistManager';
+import { TranslationKey } from '../constants/translations';
 
 interface SettingMenuProps {
   setSettingState: (state: boolean) => void;
@@ -46,83 +46,83 @@ export const SettingMenu = ({
 
   return (
     <form onSubmit={handleSave}>
-      <div className="backdrop">
-        <div className="setting-menu">
+      <div className='backdrop'>
+        <div className='setting-menu'>
           {/* Settings Module */}
-          <div className="settings-module">
-            <div className="module-header">
-              <h3>{t("settings")}</h3>
+          <div className='settings-module'>
+            <div className='module-header'>
+              <h3>{t('settings')}</h3>
             </div>
 
-            <div className="settings-content">
-              <div className="row">
-                <label className="minimun-width">{t("defaultTimeBetweenSearchCycles")}</label>
+            <div className='settings-content'>
+              <div className='row'>
+                <label className='minimun-width'>{t('defaultTimeBetweenSearchCycles')}</label>
                 <input
-                  type="number"
-                  id="searchCycles"
-                  name="searchCycles"
+                  type='number'
+                  id='searchCycles'
+                  name='searchCycles'
                   min={500}
                   max={999999}
                   value={timeBetweenSearchCycles}
-                  onChange={(e) => handleInputChange(e, setTimeBetweenSearchCycles)}
+                  onChange={e => handleInputChange(e, setTimeBetweenSearchCycles)}
                 />
-                <label className="margin-between-input-and-label">(ms)</label>
+                <label className='margin-between-input-and-label'>(ms)</label>
               </div>
 
-              <div className="row">
-                <label className="minimun-width">{t("defaultTimeAfterFiveSearchCycles")}</label>
+              <div className='row'>
+                <label className='minimun-width'>{t('defaultTimeAfterFiveSearchCycles')}</label>
                 <input
-                  type="number"
-                  id="fiveSearchCycles"
-                  name="fiveSearchCycles"
+                  type='number'
+                  id='fiveSearchCycles'
+                  name='fiveSearchCycles'
                   min={4000}
                   max={999999}
                   value={timeToWaitAfterFiveSearchCycles}
-                  onChange={(e) => handleInputChange(e, setTimeToWaitAfterFiveSearchCycles)}
+                  onChange={e => handleInputChange(e, setTimeToWaitAfterFiveSearchCycles)}
                 />
-                <label className="margin-between-input-and-label">(ms)</label>
+                <label className='margin-between-input-and-label'>(ms)</label>
               </div>
 
-              <div className="row">
-                <label className="minimun-width">{t("defaultTimeBetweenUnfollows")}</label>
+              <div className='row'>
+                <label className='minimun-width'>{t('defaultTimeBetweenUnfollows')}</label>
                 <input
-                  type="number"
-                  id="timeBetweenUnfollow"
-                  name="timeBetweenUnfollow"
+                  type='number'
+                  id='timeBetweenUnfollow'
+                  name='timeBetweenUnfollow'
                   min={1000}
                   max={999999}
                   value={timeBetweenUnfollows}
-                  onChange={(e) => handleInputChange(e, setTimeBetweenUnfollows)}
+                  onChange={e => handleInputChange(e, setTimeBetweenUnfollows)}
                 />
-                <label className="margin-between-input-and-label">(ms)</label>
+                <label className='margin-between-input-and-label'>(ms)</label>
               </div>
 
-              <div className="row">
-                <label className="minimun-width">{t("defaultTimeAfterFiveUnfollows")}</label>
+              <div className='row'>
+                <label className='minimun-width'>{t('defaultTimeAfterFiveUnfollows')}</label>
                 <input
-                  type="number"
-                  id="timeAfterFiveUnfollows"
-                  name="timeAfterFiveUnfollows"
+                  type='number'
+                  id='timeAfterFiveUnfollows'
+                  name='timeAfterFiveUnfollows'
                   min={70000}
                   max={999999}
                   value={timeToWaitAfterFiveUnfollows}
-                  onChange={(e) => handleInputChange(e, setTimeToWaitAfterFiveUnfollows)}
+                  onChange={e => handleInputChange(e, setTimeToWaitAfterFiveUnfollows)}
                 />
-                <label className="margin-between-input-and-label">(ms)</label>
+                <label className='margin-between-input-and-label'>(ms)</label>
               </div>
 
-              <div className="warning-container">
-                <h3 className="warning"><b>{t("warningTitle")}:</b> {t("warningMessage")}</h3>
-                <h3 className="warning">{t("warningDisclaimer")}</h3>
+              <div className='warning-container'>
+                <h3 className='warning'><b>{t('warningTitle')}:</b> {t('warningMessage')}</h3>
+                <h3 className='warning'>{t('warningDisclaimer')}</h3>
               </div>
             </div>
           </div>
 
           {/* Divider */}
-          <hr className="module-divider" />
+          <hr className='module-divider' />
 
           {/* Whitelist Management Module */}
-          <div className="whitelist-module">
+          <div className='whitelist-module'>
             <WhitelistManager
               whitelistedUsers={whitelistedUsers}
               onWhitelistUpdate={onWhitelistUpdate}
@@ -131,9 +131,9 @@ export const SettingMenu = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="btn-container">
-            <button className="btn" type="button" onClick={() => setSettingState(false)}>{t("cancel")}</button>
-            <button className="btn" type="submit">{t("save")}</button>
+          <div className='btn-container'>
+            <button className='btn' type='button' onClick={() => setSettingState(false)}>{t('cancel')}</button>
+            <button className='btn' type='submit'>{t('save')}</button>
           </div>
         </div>
       </div>

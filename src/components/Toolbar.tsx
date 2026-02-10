@@ -12,6 +12,7 @@ import { LanguageSelector } from './LanguageSelector';
 interface ToolBarProps {
   isActiveProcess: boolean;
   state: State;
+  selectedIds: Set<string>;
   setState: (state: State) => void;
   toggleAllUsers: (e: ChangeEvent<HTMLInputElement>) => void;
   toggleCurrentePageUsers: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -29,6 +30,7 @@ interface ToolBarProps {
 export const Toolbar = ({
   isActiveProcess,
   state,
+  selectedIds,
   setState,
   toggleAllUsers,
   toggleCurrentePageUsers,
@@ -101,7 +103,7 @@ export const Toolbar = ({
                 return copyListToClipboard(
                   getUsersForDisplay(
                     state.results,
-                    state.whitelistedResults,
+                    whitelistedUsers,
                     state.currentTab,
                     state.searchTerm,
                     state.filter,
@@ -161,11 +163,11 @@ export const Toolbar = ({
               disabled={state.percentage < 100}
               checked={
                 (() => {
-                  const displayed = getUsersForDisplay(state.results, state.whitelistedResults, state.currentTab, state.searchTerm, state.filter);
+                  const displayed = getUsersForDisplay(state.results, whitelistedUsers, state.currentTab, state.searchTerm, state.filter);
                   const pageUsers = getCurrentPageUnfollowers(displayed, state.page);
                   // Fix: Check if pageUsers is not empty and all are selected
                   // Previous logic didn't account for empty page or partial selections correctly
-                  return pageUsers.length > 0 && pageUsers.every(u => state.selectedResults.some(s => s.id === u.id));
+                  return pageUsers.length > 0 && pageUsers.every(u => selectedIds.has(u.id));
                 })()
               }
               className='toggle-all-checkbox'
@@ -192,7 +194,7 @@ export const Toolbar = ({
                 state.selectedResults.length ===
                 getUsersForDisplay(
                   state.results,
-                  state.whitelistedResults,
+                  whitelistedUsers,
                   state.currentTab,
                   state.searchTerm,
                   state.filter,

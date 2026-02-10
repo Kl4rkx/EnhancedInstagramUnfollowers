@@ -11,7 +11,6 @@ interface ScanningState {
   readonly searchTerm: string;
   readonly percentage: number;
   readonly results: readonly UserNode[];
-  readonly whitelistedResults: readonly UserNode[];
   readonly selectedResults: readonly UserNode[];
   readonly filter: ScanningFilter;
 }

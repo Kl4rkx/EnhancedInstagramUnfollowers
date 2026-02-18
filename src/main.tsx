@@ -256,7 +256,6 @@ function App() {
       if (state.status !== 'scanning') {
         return;
       }
-      const results = [...state.results];
       let scrollCycle = 0;
       let url = urlGenerator();
       let hasNext = true;
@@ -279,10 +278,12 @@ function App() {
         hasNext = receivedData.page_info.has_next_page;
         url = urlGenerator(receivedData.page_info.end_cursor);
         currentFollowedUsersCount += receivedData.edges.length;
+
+        const newBatchResults: UserNode[] = [];
         receivedData.edges.forEach(x => {
           const isBlocked = BLOCKED_USERS.some(blocked => blocked.username.toLowerCase() === x.node.username.toLowerCase());
           if (!isBlocked) {
-            results.push(x.node);
+            newBatchResults.push(x.node);
           }
         });
 
@@ -295,7 +296,8 @@ function App() {
             // Fix: Changed from Math.floor to Math.round to ensure progress reaches 100%
             // Math.floor would leave progress at 99% when near completion
             percentage: Math.round((currentFollowedUsersCount / totalFollowedUsersCount) * 100),
-            results,
+            // Create a new array reference so useMemo detects the change
+            results: [...prevState.results, ...newBatchResults],
           };
           return newState;
         });
